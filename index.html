@@ -747,11 +747,11 @@ function renderClubs() {
   CLUBS.forEach((club, idx) => {
     if (club.hidden) return;
     const card = document.createElement("div");
-    card.className = "club-card" + (club.status ? " disabled" : "");
+    card.className = "club-card" + (club.displayStatus ? " disabled" : "");
     card.dataset.id = club.id;
     card.dataset.mode = club.mode;
     card.dataset.type = club.type;
-    card.dataset.status = club.status || "";
+    card.dataset.status = club.displayStatus || "";
     card.dataset.searchText = (club.name + " " + (club.intro || "") + " " + (club.host || "") + " " + (club.location || "")).toLowerCase();
 
     const metaItems = [];
@@ -773,12 +773,12 @@ function renderClubs() {
             <div class="club-title"><span class="club-id">${escapeHtml(club.id)}</span>${escapeHtml(club.name)}</div>
             ${club.season ? `<div class="club-season">${escapeHtml(club.season)}</div>` : ""}
           </div>
-          <input type="checkbox" class="club-check" data-value="${escapeAttr(club.value)}" aria-label="${escapeAttr(club.name)} 선택"${club.status ? " disabled" : ""}>
+          <input type="checkbox" class="club-check" data-value="${escapeAttr(club.value)}" aria-label="${escapeAttr(club.name)} 선택"${club.displayStatus ? " disabled" : ""}>
         </div>
         <div class="club-tags">
           <span class="tag tag-${club.mode === '온라인' ? 'online' : 'offline'}">${escapeHtml(club.mode)}</span>
           <span class="tag tag-${club.type === '챌린지' ? 'challenge' : club.type === '스터디' ? 'study' : 'hobby'}">${escapeHtml(club.type)}형</span>
-          ${club.status ? `<span class="tag tag-${club.status === '마감' ? 'closed' : 'soon'}">${escapeHtml(club.status === '미오픈' ? '오픈 예정' : club.status)}</span>` : ""}
+          ${club.displayStatus ? `<span class="tag tag-${club.displayStatus === 'closed' ? 'closed' : 'soon'}">${escapeHtml({closed:'마감', soon:'오픈 예정'}[club.displayStatus] || club.displayStatus)}</span>` : ""}
         </div>
         <dl class="club-meta">${metaItems.join("")}</dl>
         <div class="club-actions">
@@ -793,7 +793,7 @@ function renderClubs() {
 
     check.addEventListener("change", (e) => {
       e.stopPropagation();
-      if (club.status) { check.checked = false; return; }
+      if (club.displayStatus) { check.checked = false; return; }
       if (check.checked) {
         state.selected.add(club.value);
         card.classList.add("selected");
@@ -812,7 +812,7 @@ function renderClubs() {
 
     card.addEventListener("click", (e) => {
       if (e.target === check || e.target === detailBtn) return;
-      if (club.status) return;
+      if (club.displayStatus) return;
       check.checked = !check.checked;
       check.dispatchEvent(new Event("change"));
     });
@@ -939,7 +939,9 @@ async function loadAndRender() {
     SEASON = data.season || "";
     CLUBS = (data.clubs || []).map(c => ({
       ...c,
-      season: c.season_count ? `${c.season_count}번째 시즌` : ""
+      season: c.season_count ? `${c.season_count}번째 시즌` : "",
+      // "open"은 활성 상태이므로 표시/disable에 사용하지 않음
+      displayStatus: (c.status && c.status !== "open") ? c.status : null,
     }));
     renderClubs();
   } catch (e) {
