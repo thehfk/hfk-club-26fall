@@ -684,7 +684,7 @@
 <script>
 // === 설정 ===
 // Google Sheet에서 파일 → 공유 → 웹에 게시 → CSV 형식으로 게시한 URL
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRONuqty-0ofz0386iwiXx8cARfD0RJFUo3HH0BWNKiOLC4q14zL8TxFXGXL-KMyZzmYbBb_hpZSr9_/pub?gid=1684321573&single=true&output=csv";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRONuqty-0ofz0386iwiXx8cARfD0RJFUo3HH0BWNKiOLC4q14zL8TxFXGXL-KMyZzmYbBb_hpZSr9_/pub?gid=1810135781&single=true&output=csv";
 // 대시보드 접근 암호
 const ACCESS_PW = "hfk1004";
 
@@ -833,18 +833,19 @@ async function loadData() {
 document.getElementById("refreshBtn").addEventListener("click", loadData);
 
 // === 컬럼 찾기 ===
-function colIdx(keyword) {
-  return state.headers.findIndex(h => h && h.includes(keyword));
+// 여러 키워드 중 하나라도 헤더에 포함되면 매칭 (26여름 한글 헤더 + 26가을 영문 헤더 둘 다 지원)
+function colIdx(...keywords) {
+  return state.headers.findIndex(h => h && keywords.some(k => h.toLowerCase().includes(k.toLowerCase())));
 }
 
 // === 렌더링 ===
 function render() {
-  const idxClubs = colIdx("클럽");
-  const idxName = colIdx("이름");
-  const idxEmail = colIdx("이메일");
-  const idxMotiv = colIdx("동기");
-  const idxHost = colIdx("호스트");
-  const idxTarget = colIdx("가입");
+  const idxClubs = colIdx("클럽", "clubs");
+  const idxName = colIdx("이름", "name");
+  const idxEmail = colIdx("이메일", "email");
+  const idxMotiv = colIdx("동기", "motivation");
+  const idxHost = colIdx("호스트", "host");
+  const idxTarget = colIdx("가입", "target");
 
   // 통계
   const totalSubs = state.rows.length;
