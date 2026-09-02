@@ -1,0 +1,1262 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[HFK클럽] 26여름시즌 클럽 신청서</title>
+<style>
+  :root {
+    --hfk-red: #980000;
+    --hfk-red-soft: #f4ecec;
+    --text: #1a1a1a;
+    --muted: #666;
+    --line: #e5e5e5;
+    --line-strong: #d0d0d0;
+    --bg: #f7f7f5;
+    --card: #ffffff;
+    --focus: rgba(152, 0, 0, 0.15);
+    --soft: #f4f0f0;
+    --tag-online: #1a5b8a;
+    --tag-online-bg: #e8f1f8;
+    --tag-offline: #6b4423;
+    --tag-offline-bg: #f3ece3;
+    --tag-challenge: #2d6a4f;
+    --tag-challenge-bg: #e5f1ec;
+    --tag-study: #5a3d8a;
+    --tag-study-bg: #ede7f5;
+    --tag-hobby: #a0522d;
+    --tag-hobby-bg: #f5ebe2;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 24px 16px 120px; }
+
+  header.page-header {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+  header.page-header h1 {
+    margin: 0 0 14px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--hfk-red);
+    letter-spacing: -0.01em;
+  }
+  header.page-header .intro {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.7;
+    white-space: pre-line;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 14px;
+  }
+  .card h2 {
+    margin: 0 0 14px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .card .body {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--text);
+    white-space: pre-line;
+  }
+  .card.compact { padding: 20px 24px; }
+
+  .filter-bar {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    position: sticky;
+    top: 8px;
+    z-index: 5;
+  }
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .filter-row:last-child { margin-bottom: 0; }
+  .filter-label {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+    min-width: 52px;
+  }
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #fff;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.12s;
+    font-family: inherit;
+  }
+  .chip:hover { border-color: var(--hfk-red); color: var(--hfk-red); }
+  .chip.active {
+    background: var(--hfk-red);
+    color: #fff;
+    border-color: var(--hfk-red);
+  }
+  .chip .count { font-size: 12px; opacity: 0.7; }
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px 14px;
+    font-size: 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-family: inherit;
+    background: #fff;
+  }
+  .search-box:focus {
+    outline: none;
+    border-color: var(--hfk-red);
+    box-shadow: 0 0 0 3px var(--focus);
+  }
+  .filter-summary {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 4px 0 0;
+  }
+
+  .club-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .club-card {
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 0;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .club-card-body {
+    padding: 16px 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .club-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--soft);
+    display: block;
+    border-bottom: 1px solid var(--line);
+  }
+  .club-card:hover { border-color: var(--hfk-red); }
+  .club-card.selected {
+    border-color: var(--hfk-red);
+    background: var(--hfk-red-soft);
+  }
+  .club-card.hidden { display: none; }
+  .club-card.disabled {
+    opacity: 0.55;
+    background: #f7f7f7;
+    cursor: not-allowed;
+  }
+  .club-card.disabled:hover { border-color: var(--line); }
+  .club-card.disabled .club-check { cursor: not-allowed; }
+  .tag-closed { background: #efefef; color: #666; }
+  .tag-soon { background: #fff4e6; color: #b06b00; }
+  .club-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .club-title {
+    font-size: 15.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text);
+    flex: 1;
+  }
+  .club-id {
+    display: inline-block;
+    background: var(--soft);
+    color: var(--hfk-red);
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 13px;
+    margin-right: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .club-season {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: 4px;
+  }
+  .club-check {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    accent-color: var(--hfk-red);
+    cursor: pointer;
+    margin: 2px 0 0;
+  }
+  .club-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .tag {
+    font-size: 11.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .tag-online { background: var(--tag-online-bg); color: var(--tag-online); }
+  .tag-offline { background: var(--tag-offline-bg); color: var(--tag-offline); }
+  .tag-challenge { background: var(--tag-challenge-bg); color: var(--tag-challenge); }
+  .tag-study { background: var(--tag-study-bg); color: var(--tag-study); }
+  .tag-hobby { background: var(--tag-hobby-bg); color: var(--tag-hobby); }
+  .club-meta {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 10px;
+  }
+  .club-meta dt {
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 12.5px;
+  }
+  .club-meta dd {
+    margin: 0;
+    color: var(--text);
+    font-size: 13px;
+  }
+  .club-actions { margin-top: 4px; }
+  .detail-btn {
+    background: none;
+    border: none;
+    color: var(--hfk-red);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    text-decoration: underline;
+  }
+  .detail-btn:hover { color: #7a0000; }
+  .club-body-full {
+    display: none;
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--text);
+    white-space: pre-line;
+  }
+  .club-card.expanded .club-body-full { display: block; }
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .form-section { margin-top: 32px; }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 14px;
+    padding-left: 4px;
+  }
+  .q-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .required::after { content: " *"; color: var(--hfk-red); }
+  .q-desc {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 0 14px;
+    white-space: pre-line;
+    line-height: 1.65;
+  }
+  input[type="text"], input[type="email"], input[type="tel"], textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 15px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: inherit;
+    background: #fff;
+    color: var(--text);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--hfk-red);
+    box-shadow: 0 0 0 3px var(--focus);
+  }
+  textarea { min-height: 140px; resize: vertical; line-height: 1.6; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .opt:hover { background: #f7f7f7; border-color: #ccc; }
+  .opt input {
+    margin: 4px 0 0;
+    accent-color: var(--hfk-red);
+    flex-shrink: 0;
+  }
+  .opt span { font-size: 14.5px; line-height: 1.5; }
+  .promise-list {
+    margin: 0 0 14px;
+    padding: 14px 16px 14px 32px;
+    background: var(--soft);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .promise-list li { margin: 4px 0; }
+  .selected-summary {
+    background: var(--soft);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text);
+    min-height: 44px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .selected-summary.empty {
+    color: var(--muted);
+    font-style: italic;
+  }
+  .selected-chip {
+    background: #fff;
+    border: 1px solid var(--line-strong);
+    padding: 3px 4px 3px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .selected-chip .chip-remove {
+    background: none;
+    border: 0;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-family: inherit;
+    transition: background 0.12s, color 0.12s;
+  }
+  .selected-chip .chip-remove:hover {
+    background: var(--hfk-red);
+    color: #fff;
+  }
+  .error {
+    color: var(--hfk-red);
+    font-size: 13px;
+    margin-top: 6px;
+    display: none;
+  }
+  .error.show { display: block; }
+  .footer-note {
+    margin-top: 20px;
+    padding: 16px 18px;
+    background: var(--soft);
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.75;
+    white-space: pre-line;
+  }
+  .submit-wrap {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 24px;
+  }
+  button[type="submit"] {
+    background: var(--hfk-red);
+    color: #fff;
+    border: 0;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, transform 0.05s;
+  }
+  button[type="submit"]:hover { background: #7a0000; }
+  button[type="submit"]:active { transform: translateY(1px); }
+  button[type="submit"]:disabled { background: #ccc; cursor: not-allowed; }
+
+  .sticky-bar {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    background: var(--text);
+    color: #fff;
+    border-radius: 999px;
+    padding: 10px 20px 10px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    z-index: 50;
+    opacity: 0;
+    transform: translate(-50%, 80px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+  .sticky-bar.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+  }
+  .sticky-bar .count-num {
+    font-weight: 700;
+    color: #ffb1b1;
+    font-size: 15px;
+  }
+  .sticky-bar button {
+    background: var(--hfk-red);
+    color: #fff;
+    border: 0;
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .sticky-bar button:hover { background: #b30000; }
+
+  .done {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 48px 28px;
+    text-align: center;
+  }
+  .done h2 {
+    color: var(--hfk-red);
+    margin: 0 0 14px;
+    font-size: 22px;
+  }
+  .done p { margin: 8px 0; font-size: 15px; }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 16px 12px 140px; }
+    header.page-header { padding: 22px 20px; }
+    header.page-header h1 { font-size: 21px; }
+    .card { padding: 20px 18px; }
+    .filter-bar { padding: 14px 16px; }
+    .club-grid { grid-template-columns: 1fr; }
+    .filter-label { min-width: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-header">
+    <h1>[HFK클럽] 26여름시즌 클럽 신청서</h1>
+    <div class="intro">HFK 커뮤니티 동아리에 오신 걸 환영합니다.
+
+HFK는 '느슨하지만 촘촘한' 커뮤니티를 만들어 가기 위해 2022년 봄부터 팀, 이벤트와 더불어 클럽을 운영하고 있습니다. 팀이 전공이라면 이벤트는 교양이고 클럽은 동아리입니다.
+
+1. 팀: 하나의 주제를 깊게 다루는 학습 그룹
+2. 이벤트: 멤버들의 지적 자극을 위한 커뮤니티 행사
+3. 클럽: 멤버들이 자체적으로 취미 활동을 영위하는 커뮤니티 동아리
+
+2026년 여름 HFK 클럽은 18번째 시즌을 맞이합니다.</div>
+  </header>
+
+  <div class="card compact">
+    <h2>신청 전 필독 사항</h2>
+    <div class="body">1. HFK 클럽은 멤버들이 자체적으로 운영하는 동아리입니다. 클럽 운영자(a.k.a. 호스트)가 없는 클럽의 경우 신청한 멤버 중에서 랜덤으로 호스트가 정해집니다. <u>신청서 제출 시 모든 멤버가 자동으로 호스트 후보가 됩니다.</u>
+
+2. HFK 클럽은 멤버들의 교류와 성장을 위한 작은 커뮤니티입니다. <u>적극적인 참여와 기여가 중요합니다.</u>
+
+3. 클럽은 3개월 동안 운영되며 월 1회 오프라인 모임(총 3회) 또는 주 1회 온라인 미션(총 10회)을 기본으로 합니다.
+
+4. 참여도를 높이기 위해 모든 클럽은 디파짓 제도로 운영됩니다. 클럽별로 디파짓을 내고 참여도에 따라 리워드(환급) 받는 방식입니다.
+
+5. <u>디파짓 금액: 챌린지형 클럽 회당 1만원, 스터디형 회당 2만원, 취미형 회당 1만원</u>
+
+6. <u>시즌 공식 일정이 끝난 후</u> 적립된 리워드를 환급해드립니다.
+
+7. 일부 클럽의 경우 정원이 있습니다. <u>신청 인원이 많을 경우 호스트가 신청 동기를 바탕으로 선정하게 됩니다. 신청 동기를 잘 작성해주세요.</u>
+
+8. <u>클럽 중복 신청이 가능합니다. (2~3개 추천)</u>
+
+9. 정모에 빈자리가 생길 경우 '시즌 번개 클럽' 채널을 통해 다른 클럽 멤버를 초대할 수 있습니다.
+
+10. 팀/이벤트/클럽 일정은 HFK 캘린더에서 확인하실 수 있습니다.
+
+11. 비시즌 멤버(OB 멤버)도 HFK 후원금 납부 후 참여 가능합니다.</div>
+  </div>
+
+  <div class="card compact">
+    <h2>2026 여름시즌 클럽 모집</h2>
+    <div class="body">1. 멤버 모집: 6/8(월) - 6/10(수)
+2. 멤버 확정: 6/11(목)
+3. 클럽 초대: 6/12(금) - 6/14(일)
+4. 클럽 운영: 6/15(월) - 8/31(월)
+
+신청 가능한 클럽 총 25개 (온라인 5개, 오프라인 20개)
+온라인 클럽은 숫자(0-4), 오프라인 클럽은 알파벳(a-x)으로 표시됩니다.</div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-row">
+      <span class="filter-label">진행</span>
+      <div class="chip-group" id="modeFilter">
+        <button class="chip active" data-mode="all" type="button">전체 <span class="count" id="cnt-all"></span></button>
+        <button class="chip" data-mode="온라인" type="button">온라인 <span class="count" id="cnt-online"></span></button>
+        <button class="chip" data-mode="오프라인" type="button">오프라인 <span class="count" id="cnt-offline"></span></button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">유형</span>
+      <div class="chip-group" id="typeFilter">
+        <button class="chip active" data-type="all" type="button">전체</button>
+        <button class="chip" data-type="챌린지" type="button">챌린지</button>
+        <button class="chip" data-type="스터디" type="button">스터디</button>
+        <button class="chip" data-type="취미" type="button">취미</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <input class="search-box" id="searchBox" type="text" placeholder="클럽명·키워드 검색 (예: 와인, 글쓰기, AI)" autocomplete="off">
+    </div>
+    <div class="filter-summary" id="filterSummary"></div>
+  </div>
+
+  <div class="club-grid" id="clubGrid"></div>
+
+  <form id="hfkForm" novalidate class="form-section">
+
+    <h2 class="section-title">신청 정보 입력</h2>
+
+    <div class="card">
+      <div class="q-title required">선택한 클럽</div>
+      <div class="q-desc">2-3개 신청 추천 (온라인 1-2개, 오프라인 1-2개). 위의 카드에서 체크해 주세요.</div>
+      <div class="selected-summary empty" id="selectedSummary">선택한 클럽이 없습니다. 위의 카드에서 클럽을 선택해 주세요.</div>
+      <div class="error" data-for="clubs">하나 이상 선택해 주세요.</div>
+    </div>
+
+    <div class="card">
+      <div class="q-title required">이름</div>
+      <input type="text" id="name" autocomplete="name">
+      <div class="error" data-for="name">이름을 입력해 주세요.</div>
+    </div>
+
+    <div class="card">
+      <div class="q-title required">이메일</div>
+      <div class="q-desc">HFK 슬랙에서 사용하는 이메일로 초대됩니다. 슬랙 이메일 다시 확인 후 입력해 주세요.</div>
+      <input type="email" id="email" autocomplete="email">
+      <div class="error" data-for="email">올바른 이메일을 입력해 주세요.</div>
+    </div>
+
+    <div class="card">
+      <div class="q-title required">전화번호</div>
+      <input type="tel" id="phone" autocomplete="tel" placeholder="010-0000-0000">
+      <div class="error" data-for="phone">전화번호를 입력해 주세요.</div>
+    </div>
+
+    <div class="card">
+      <div class="q-title required">호스트 지원</div>
+      <div class="options" id="host"></div>
+      <div class="error" data-for="host">하나를 선택해 주세요.</div>
+    </div>
+
+    <div class="card">
+      <div class="q-title required">신청 동기</div>
+      <div class="q-desc">선택하신 클럽 신청 동기를 적어주세요. <u>신청 인원이 많을 경우 호스트가 신청 동기를 보고 클럽원을 선정합니다.</u> 선정되지 않아도 걱정하지 마세요. 모든 클럽 동일하게 정모에 자리가 생길 경우 '시즌 번개 클럽'을 통해 초대를 받을 수 있습니다.</div>
+      <textarea id="motivation"></textarea>
+      <div class="error" data-for="motivation">신청 동기를 작성해 주세요.</div>
+    </div>
+
+    <div class="card">
+      <div class="q-title required">가입 대상</div>
+      <div class="q-desc">비시즌 멤버는 후원금 납부 후 참여 가능합니다.
+국민은행 010-6833-0704 (위어드벤처) / 3개월 18만원</div>
+      <div class="options" id="target"></div>
+      <div class="error" data-for="target">하나를 선택해 주세요.</div>
+    </div>
+
+    <div class="card">
+      <div class="q-title required">클럽 참여 약속</div>
+      <ul class="promise-list">
+        <li>호스트가 시간을 들여 자리를 마련하는만큼 적극적으로 참여하기로 해요.</li>
+        <li>필요한 경우 호스트를 도와서 클럽 운영에 기여해 주세요.</li>
+        <li>호스트에게 아낌없는 지지와 응원을 보내주세요.</li>
+      </ul>
+      <div class="options" id="promise"></div>
+      <div class="error" data-for="promise">약속에 동의해 주세요.</div>
+    </div>
+
+    <div class="footer-note">6/10(수) 자정에 신청 마감합니다. 6/11(목) 클럽원 확정 후 6/12(금)부터 HFK 슬랙의 각 클럽별 채널로 초대드립니다. 남겨주신 이메일로 초대드리니 이메일을 잘 확인해주세요.
+클럽 확정된 분들은 6/12(금) 슬랙 클럽 채널에서 디파짓 안내를 확인해주세요.
+6/14(일)까지 클럽 채널에 초대가 되지 않은 경우 신청자가 많아서 선정이 되지 않은 경우입니다. 6/15(월) - 6/16(화) 추가 접수를 받을 예정입니다.</div>
+
+    <div class="submit-wrap">
+      <button type="submit" id="submitBtn">제출하기</button>
+    </div>
+  </form>
+
+  <div class="done" id="done" style="display:none">
+    <h2>신청이 접수되었습니다</h2>
+    <p>HFK 슬랙 채널 초대는 6/12(금)부터 순차적으로 진행됩니다.</p>
+  </div>
+
+</div>
+
+<div class="sticky-bar" id="stickyBar">
+  <span><span class="count-num" id="stickyCount">0</span>개 클럽 선택</span>
+  <button type="button" id="scrollToForm">신청 폼으로</button>
+</div>
+
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none" onload="if(window._submitted){document.getElementById('hfkForm').style.display='none';document.querySelector('.filter-bar').style.display='none';document.getElementById('clubGrid').style.display='none';document.querySelectorAll('.card.compact').forEach(el=>el.style.display='none');document.querySelector('header.page-header').style.display='none';document.getElementById('done').style.display='block';document.getElementById('stickyBar').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'});}"></iframe>
+
+<script>
+const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSfua6mcpfWZWOAOfcpDh01HGvbg9ytMMNj_jiuDgKkT8Su_Lw/formResponse";
+
+const ENTRY = {
+  clubs:      "entry.472984658",
+  name:       "entry.1091634438",
+  email:      "entry.1924069292",
+  phone:      "entry.1862630567",
+  host:       "entry.1464297408",
+  motivation: "entry.1159197939",
+  target:     "entry.68521473",
+  promise:    "entry.446722",
+};
+
+const CLUB_IMAGES = [
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVCFhs1V6FZ2jMaykq-39lqgu1uI1qL-eKZ8KyO0jEh1zMJtBy1n3uO9C1VlCmn5m2T0L7IOxYwPcUIolkwSMyCrKjToLSh8u2uk6gsoBCc5ErAXmW2kNr9nQaw4M73HtBQ7JDy7hkeOCPTH1C2KhHMoG1HNHve0ts7TYFMszK6qkb7iQgAVQy9C07LudmYQnwWb56mnQWkFtu8WyQKs=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVAvQ8wd6lE8u-JvCen1mkobdOIqSqNmoLb8HU8UpcAOp5AZd-fgUkwFxUzdloCmobovK0UEaYqk5C3oPEyD77dQjnQIoG8osZaDt2jJq7VLsKYYZIQugLm42Qwmom1LGKB9qNi1yqp8ktRTHS_EOb0u6jLImrHyM24NqNPjZto_otWTIvKh58j4XuogaMtU36W_Egcw3bi_5ZlDo2Q=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVAwDrq17EVMLc2EVfIZ1bApF48PhAOEnFW4XtqlXk9kFtHo-k8LoyPn5Cvz3bJlmHwrx-ujqi9hcv8o6mxSFJZYyDKnyaVw2kq1DPeur7IxaCRsca6yBd2GUsZiS71_UVokFuMvpgSDjl32mRTqm4iSc12amWFOAiJfNRjCWmgLQg_XIdRIeMITqNwhwh2uREtoaKiqNYeeaXIuNjU=w1376?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVAFgvB4EWI1CI9Yk_7O655Kx4VJAQPP2BSVe_3_aBb4p5RAskRoKfjjUG17gq3o1aa7WbtOGg2AXTJdDQTpuNJjbLzaveE0Da42qQd_YpN2rAxf84dsgP0QKe4a0oYqbDo5OGACwabp2Bx3CctdF_WKb2Yp5Ia-U4YQLWXhFs_SOIWRBytTzyV5xEFPFdFzzV8PVPnxJreNl_xn_V5U=w1376?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVDYttApMhqrkrZUjUAIfrMb8KdTWsEKJ1MP8ZLnww-DAFPXvzV_yKFPRLu_-YsK1mXaDbQIUS_a-ZTOkBPvCuCp1Wa9adSQ37UWu4YeMVwH6-F5-10dxSEjFMfRobfzB61Wko3j9Q2xFAeCLzvITdXgHEAkBgIWLtHVOiUxu-MlCGmB_1RldF51fA9XRwfV6q2R5bm2v8ahiicz348=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVBcq5AQKXXDli91Uq1w-PD5cSyDNStCMnLw9Jcz55_nRIthurkNLRZkrLDopMUK8uIS6Oe5d6AzpbnPz69rw9EiADIn-gCaHQb1wu54UC4O7BSn5H7pDIAEPivqBaS6GcESPoGfSsiJZh9SVkGO_vSrHgJSPSn-2Jb-yWSOpndXko_ROBPowShg-t-Arobwlr10Q0cNIu7KOpPz0fFR=w1376?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVA6m1EdMLcJE2jNdeSLtzft9FJth3bI_Jr25AygLKuFVNAXxVhckoXH3T-SDLDMk51bIhCRbFtMeKscbzTOc27pERK5wD63eljx3aqvchXdv5LT822Wx5vVriYDwT9Yx41S2IFhXBB9ZpANbUDBKAZ2NeU3q-u87HLayA6zgbl4afOHeMidqfu4yH60XeMLtlGRJBDXmj5ohwJR9jxP=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVCjZSHa8pURENcY8O6wYObYHwEMPy0KAf7fvXoA4VuPor1WymdlC0wlhvh8EwVjE0uMIKFVw1uEc9X3SUKSKgbk-jIa7MaZtefsjQ0Oxvq__iu_44J0Ku0dtspPYeeBjSZwpXlb8e2zpCg0ov4Empe6cg3887n18FSQTuu_ZZzj8gaxzZEn1msto3LS5UEaMf4wLVEHPb3_NGisDZVj=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVA0Oi1md7FOSuWwJXSJAqgBba2CosN6aa1WXJYABxXRMSYVTjl7tp-eGrcroqBi1uCJxIjN1TriZ1Agun8xRPC9YEa4K97xbsRZSuUO29R7ozoeU0LyF9jXHO5A2G_M_jqhwIdTt4ZF0_NFoqC7QyGYSh_OI8Y6UkI_nAdZVP-WCXr3a0F0CYSv6Y09L2ki40jchorDAbvMDVVMO-eA=w739?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVDBXD7MI4WS6GSZKb5Yfcciu5gjpKs5DftsuMnFJ3R1sd2rmJ1SMU8Kub-GKw00GLrolj5-gS2bSTGm67zEIqpKipiXq6EZBbp468GzRU70g23Y9QTJSMmtDYPLvSXguludqeKDmO46VioXO_Ktc4tjGcO2RM3pZBzk8p0XovSVVzRp3Mf6L5ePkD34Y7Va0ms0GBtxHhrJxt8noWQU=w739?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVCHST7CKx92-6aLCYLAR5y8aAhHr72g0zj4vjmo9Mj0-13oSJPxP3ILX2a3HDYQEfBO_itmJFWBUV-S3PH1IrzXOfgO0fEpYYZEi2cgoeFuv8COAV3IdIO15tkBA7DicWC3SKCC0k8X-BR4UnLehnBO3vTrh1Q5qHHJkbaOl7cUlr0lPvuqRjM7Q7lEW2S8PB9OUVy_bcygGwLnJbE=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVA4ezY97CK2D2xi9vxMDNW_uh83WBdViel0u6V699qJ7ylZhI97AYf9NBG6Wyw-c56GxgLU6nhbPndu7SVjtYgewA1uJukgCxlks_ZIeEIGg62tHs217w2qt0C5G9NvLdqDCbH4kt1h9uhxpnrcbq8eG1vS7oUy2hTRNP6RtE11Y0OxuvxB_5KwnNx8vYHExxXYlprAKtpBrbgFxxtK=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVDoyuR9L1VmEalEbwpB_MlfXHI0QEte9LgdBp9SYWUVs_7Eos1GnAaIVFo5kqL6bVJxkncEw1yAwjSk7zmEZnWQ8a0vxUngipUSUfWhJ6S3a7_jFlJgyGjShd5qTfm3n9f9sKImjDmD8QDNE7Lg39QidwYS1UclDuw0SFwbjGxMZGe85-Shk1IborM4GXa8kvv33r7sOLEbpewAIDl8=w739?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVDwU6htvsLGZBK2MPQLpXdpKvooyZCElM2aJqEx2AdrXv89z7WgIr6NwzR-yvjDZM6i9p2hG4qbhJMD6GI0piCk7GVekH2owek7kn5yDpPLGg440rYcBoZwOzBhA8M70lk5oDU5NGEhRiOvEs9QdnQTgFJZaHsWafSIjLfhWc3ijYYitCNz_2I2LkZJWWNlbLJd53lkmWFcRl5Ro2M6=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVA7LDi8zKpXSUCKM1UQqLOf_dvR8sQFmwVWV1eVExOmrrqnQGWHQnDMbUqEmWPN_9VW1z44fZw_J57beSIj0eTuV4GQ7qIfGll2fpESz11sAJeCVyDa2JWutsa63N5XWXAtSrwGHFb7AQ7AmorVFAnKvOuFwaa3rr_-G93bf3idn2iL6oy0rGp5c1aVnzkes5OQGpw2W0be2Vp0mnsG=w1360?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVAe_jz-LLaRg_Og_T_6AQ0kEpSdB6UPOKKxRmVtGzXfd__cQ3yWC4Cd0Q6HtPtcCSPckAjmxmN5dQNKL9_sd94ebPZePB3h9xCzcu1KdHLVB0j3TtaoScggCfbtCLqeTuGYg8GNwiGx9ajols4SYp7YwZ2kCMlvgYIYMmFfZKvjp1__-odx8InMp0H-95_hOEblZ8WBEzfgmBiLTdwt=w739?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVDYWn9Qki6F3S3RlxMxZF9oWMzeh63owVVk-J3a48FxoGDYjLp4c6C7K_noAjIvA3CoFXWUUw1noaqB79JRsEvzPjt8yBczWoHQhPh5ifcs3F46ueO_4QGBWvDV3mPObzLFaAzEpG8jklRLXZvDKGLwWqM86gq4kdtsWlRpoKphgACRduG7yNU37ZdvgTmBiS7eavV2GVaav9eHjoPz=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVB2QiyIDbN4h4w4AomwAtyQ5tlHtjkkUDDRM8adOxqHP1iSXTuw97HdKmUmVfMuXWOMdd1_wSA9bo_3T8vMn220cvtOw8O5c0zGJLkRRUz7NghwnkQO7bVZfGj3xeBODn5o4VnmN2ZGMUg4ExHd5ek5muHvq0hXNARwbvUGtcoz2vQSnNX4yNG7g_IsWT6ZMW3_WKaGl-34OXbrmN0=w1376?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVDEFIjFElxiv0MZUa4zS59PSC6vPBjmpw1O4uTC4a52dfKOMTu3jD2PoddID4ZwaCyMiIW5UVcZidhqCgxYpcAgG8Ws0dKLq1Ltzy_NLUVrWwPnraj8B7A33vuwsVquUyceZWT78zrOEDHgGgvFCPFbAlIMpyGnhaCL8YDwj4wUrf2iMzfEJ90l1nQzhb7pxabTexhDi2dtIY1KFhMF=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVC547dU_Lw3vsWlAGCtdHm2Oe9UjDyAemwztlxb6N8uX3VjlPVuyYD22jMp-RYExO0yWvTbxa5kkjLkQHTfOZvOqrVlDlyNqeu1zL3Usplrx4BFUEoKEfv8KtfWDtCSrx4y5CAVGvSWDxUGgd0SG6HD2h4ZLpUkftDf_ZcZxMODczZzRbUlMXdx9lBirHEouc3rJ2MLYNuHRVsFvqo=w1360?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVBWhqxsUKw2Tc5guiw74rbGVn-TYVsD8qIIXdkOKOmBoQv2bG1zMRFNjPR8tiQ4PlZAN5Bsqz-XlwTn4HtFYqQ8IlrvuqGHHjJ2KgNiS2CMt8sN2ZuXs9ZtcEND9_vZZNE5wbjw-F2bkovrSJZaHRK0ZBRVJ0Q_T3JDBZ7AGNXtWu_kvF6EDii_45AElbcdK4dNRBcLz0xsEt9osiw5=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVATulsrIPm58dvnktS3M3052870N_EIK426kNzkjl_GF00Hy-2Ikr13LhhvyJLW6hFqkvrs4FUw-PlL2hGiDuP4RR2EMy0EwPglxA4MymlgbjkvbIf7fFxFMjt0RtKc315fl0A3_830B-cSUV8xJTkWbrcb7wocLXn-IQ88YaPsk_PzKrX-v_Bf0438eNH1FVESLHvBCjDF1yjxM2LW=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVADxq9e_IfHZjASJXi49mck3koKVUHN-JLXdBwp1DdQ230Z4Fw1dH1MBa8rfYKjklC8nqXKa38Jc_BD6TzfMMlBatNBUQHKCuG2VAwrMdrQkcsF6XlPENLDbLLMwrsTe-jebs-Az0VDXL4j4L4l-eQkpnBvICI3-F5AP0c43n7lu-cBwLtq2EayXVPqL-9XZvNoDcy-T7L0Yk4lIMA_=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVCR_BTeoP-uynkp1ErIF4mr7-sySwg_YbU8equiUen7fk3_R0vPgrb61-Dx-BH3w8ajfGT-MwfJ2mk-bsZTcS6zAW0lOzTB1VrJVgAdqY9zA7-Jcryi1--TG0cIKwYVF1OV9f9sDWwOvyMM6cOFCu3G7Kal34XD817EobKxKGJ9HYdm5pORglhJh-uRcrJCJ_eZele0uOYWbrPc8KUg=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVCaQTkEbly1XKSKanDmfiObuDi_AjlyXOkY-vL7rhmv5lLcacgUfr24jiTqrrUR3iP5LELUcNiYGA9S38PtzTX4p0v_A-N4VD9vHXPPSOgM9RU4XL8ISpMPD54vhRFnCsRyWbHQe6ENGvAaLqBDVlgNCUZLaLgj7-7bI_CNO7YSlUAsJs-M4V6XQ9_42aZqd3sTBTirmR80-HlYQM2Y=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVC1-bRTsN5evJ53JeNdWLdB0kbm_xJ874h6N-AJYED0qnKCxZ1J0Wz-nFc7G0-RHWo1VKvNEToXqzd7KR0NnLOVug-XLB5chzYebSf_4SfiR_KP-j4KeZ_NMrSfFXYF9qtwRFVeghSu03DNqso7zNZhR5Z-etsuYPDPL_fmAWwfm6A1RyiTvLRoF5yonxP7gzOxAzGTpZded8shXxI=w1360?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVBBc5K7U2kx7_Y0GVWDc5oy5-nKSX5yjxdorPcu7G1DAa7YRN-Nq9sKlohcFP2D0yDdSc0NIolQKpl3RGlxTdERHk7kZVWe8l3zMc7DKnwrEbSy3f3XHwQd6v7coUuamgD1Yi0aY9eI5ZxAFrau1kjEhaEKaeMyifB0mJllZnMv3V-J-g77kGWfe7hS3iXPlZsRFCsKIvm2TwsDeNVN=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVBO_7BCbkJzOevk_QDgj8KhBIhgr8OA6gymMoKx-pmbkoiimSztfTwm4OtutPCUFtJZnX6ezHuZdsgeubTwmsBJJSoyWqXAhx1sZpmGt4SseuIqvKv35tiJL5zRcFQAdF61H32TRLdQDNumwcX-j9ODrhqpFP-LqLZigjGOjigHnzCWxuYQijc60Vjc5PDbYV6H-ZJp6KuZB4fV3Uy6=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVA1-Npr88W2lRd5cc5OeBkF5DnHZ9lo4l8sAh5NvLjoytPU4Jz8v9j-0OyC8LVaBlH8dr4nsZUQg72i4YiIbR5Yanj7R8cZTbmMA1AOFkGiMKk-W2GiGwETA3TbLWoGhDfSbtqLIBUyNOO8NewYKXthJ8NacIEaoqGLjmVzPqY7YQlfhK7L-lYcUsZix973Ea5oZxHOHgJ7QRml9vI=w1408?key=mn122IjfHvpxhHUFFWUX8w",
+  "https://lh7-rt.googleusercontent.com/formsz/AN7BsVCFw3mOJ0sU2Zt2yhBRswsPP5bsIlO6naFgh4OX-U9nINnsCVYHMk-C7jp-kvQFTbMWDygcoXHjCRNz4h8q1kwB5Mpdyaf3uVp0kjt0Wwg285dweSjUTnMMlr9FHr96EamzS3a3Peyj_5MuqSzUGJsoYwQyv-Q7faVrLtDoVnZi-UNqg5ZBVE0KNDKbGKm5Cb3K0RqTlU5kUBN2kcA=w1408?key=mn122IjfHvpxhHUFFWUX8w"
+];
+
+const CLUBS = [
+  {
+    id: "0", value: "0-주간회고클럽", name: "주간회고클럽", season: "12번째 시즌",
+    mode: "온라인", type: "챌린지", deposit: "10만원",
+    schedule: "10주간 주 1회, 매주 월요일 자정 마감",
+    host: "클럽원이 돌아가며 호스트",
+    intro: "바쁜 하루를 보내다 보면, 한 주가 어떻게 지나갔는지도 모를 때가 있습니다. 주간회고클럽은 그 시간을 다시 '내 것'으로 돌려놓는 루틴입니다. 한 주를 돌아보고 기록하는 10주의 여정. 혼자였다면 꾸준히 하기 어려운 회고, 함께라면 할 수 있습니다. 작은 기록이 쌓이면, 흐릿했던 나의 흐름이 선명해집니다.\n\n[운영방식]\n- 10주간 주 1번 지난 한 주를 회고하고 기록합니다.\n- 서로의 회고를 이모지로 응원합니다.\n- 디파짓 10만원\n- 매주 월요일 자정 마감"
+  },
+  {
+    id: "1", value: "1-HBR챌린져스", name: "HBR 챌린져스", season: "17번째 시즌",
+    mode: "온라인", type: "챌린지", deposit: "10만원",
+    schedule: "10주간 주 1회, 매주 화요일 자정 마감",
+    host: "클럽원이 돌아가며 호스트",
+    intro: "가장 확실한 비즈니스 인사이트, Harvard Business Review. HBR 챌린저스는 10주 동안 매주 한 편의 HBR 아티클을 읽고 기록하는 실전형 챌린지입니다. 이제는 읽고 지나치지 말고, HBR을 '내 것'으로 만드는 경험을 시작해보세요. 읽고, 생각하고, 기록하는 10주. 그 꾸준함이 커리어를 바꿉니다.\n\n[운영방식]\n- 10주간 1주일에 1개의 아티클을 읽고 후기를 기록합니다.\n- 서로의 기록을 이모지로 응원합니다.\n- 디파짓 10만원\n- 매주 화요일 자정 마감\n\n* 좋은 기록은 일부 편집되어 HFK 인스타그램에 공유될 수 있습니다. @hfk_official"
+  },
+  {
+    id: "2", value: "2-필사클럽", name: "필사클럽", season: "15번째 시즌",
+    mode: "온라인", type: "챌린지", deposit: "10만원",
+    schedule: "10주간 주 1회, 매주 월요일 자정 마감",
+    host: "이승표 (현대자동차 PM)",
+    intro: "글이 곧 나를 드러내는 시대, 문장력을 키우는 가장 확실한 방법은 좋은 문장을 손으로 따라 써보는 것입니다. 필사클럽은 매주 한 편의 글을 필사하며 문장 감각을 기르고, 나만의 언어를 다듬는 모임입니다. 사각사각 종이를 스치는 소리와 함께 마음도 차분히 정리되는 작지만 깊은 힐링의 시간을 경험하게 됩니다.\n\n글씨가 예쁘지 않아도 괜찮아요. 좋아하는 노트와 펜만 있으면 충분합니다. 혼자선 지키기 어려운 꾸준함도, 함께라면 끝까지 이어질 수 있습니다.\n\n[운영방식]\n- 10주간 1주일에 1번 필사를 합니다. 호스트가 매주 필사할 주제를 안내합니다.\n- 서로의 필사를 이모지로 응원합니다.\n- 디파짓 10만원\n- 매주 월요일 자정 마감"
+  },
+  {
+    id: "3", value: "3-문장수집클럽", name: "문장수집클럽", season: "9번째 시즌",
+    mode: "온라인", type: "챌린지", deposit: "10만원",
+    schedule: "10주간 주 1회, 매주 수요일 자정 마감",
+    host: "클럽원이 돌아가며 호스트",
+    intro: "책을 읽거나 영상을 보다보면 가끔 마음을 깊게 두드리는 문장이 있습니다. 그 짧은 문장이 생각을 바꾸고, 하루의 방향을 바꾸고, 때로는 삶을 살짝 틀어놓기도 하죠.\n\n문장수집클럽은 그런 소중한 문장들을 흘려보내지 않고 함께 모으고 나누는 모임입니다. 한 문장씩 수집해 기록하다 보면 내 안의 어휘 감각이 단단해지고, 읽기의 깊이도 달라집니다.\n\n[운영방식]\n- 10주간 1주일에 1개의 문장을 수집해서 기록합니다.\n- 서로의 수집을 이모지로 응원합니다.\n- 디파짓 10만원\n- 매주 수요일 자정 마감\n\n* 수집한 문장 중 일부는 편집되어 HFK 인스타그램에 공유될 수 있습니다. @hfk_official"
+  },
+  {
+    id: "4", value: "4-차곡차곡SNS클럽", name: "차곡차곡SNS클럽", season: "7번째 시즌",
+    mode: "온라인", type: "챌린지", deposit: "10만원",
+    schedule: "10주간 주 1회, 매주 월요일 자정 마감",
+    host: "클럽원이 돌아가며 호스트",
+    intro: "SNS, 그동안 시간 낭비라고만 느껴지셨나요? 사실 잘 쌓인 온라인 기록은 어느 순간 당신의 가능성을 증명하는 가장 확실한 자산이 됩니다.\n\n차곡차곡SNS클럽은 10주 동안 링크드인, 인스타그램, 쓰레드 등 각자의 채널에 생각과 콘텐츠를 천천히, 꾸준히 쌓아가는 모임입니다.\n\n혼자였다면 작심삼일로 끝났을 습관도 함께라면 자연스럽게 루틴이 됩니다.\n\n[운영방식]\n- 각자 10주간 올릴 콘텐츠 주제를 정합니다.\n- 매주 자신의 SNS에 관련 주제로 기록을 남깁니다.\n- 다른 클럽원들의 콘텐츠를 찾아가서 좋아요로 서로 응원해줍니다.\n- 디파짓 10만원\n- 매주 월요일 자정 마감"
+  },
+  {
+    id: "5", value: "5-디테일수집클럽", name: "디테일수집클럽", season: "4번째 시즌",
+    hidden: true,
+    mode: "온라인", type: "챌린지", deposit: "10만원",
+    schedule: "10주간 주 1회, 매주 금요일 자정 마감",
+    host: "클럽원이 돌아가며 호스트",
+    intro: "좋은 경험과 나쁜 경험의 차이는 결국 작은 디테일에서 시작됩니다. 디테일수집클럽은 일상 속에서 그런 디테일을 발견하고 공유하는 모임입니다.\n\n'경험디자인'과 '감각적기획' 팀에서 시작된 활동으로, 기획자의 감각을 키우는 훈련이기도 합니다. 일상에서 스쳐 지나갔던 순간도 누군가의 시선과 해석을 통해 새로운 인사이트가 됩니다. 10주 후, 당신의 관찰력은 분명 전과 다를 거예요.\n\n[운영방식]\n- 10주간 1주일에 1번, 일상 속 경험에서 '좋은 경험'을 만드는 디테일들을 찾아 공유해요.\n- 서로의 수집을 이모지로 응원합니다.\n- 디파짓 10만원\n- 매주 금요일 자정 마감"
+  },
+  {
+    id: "a", value: "a-와인소사이어티", name: "와인 소사이어티", season: "18번째 시즌",
+    status: "마감",
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/15(월), 7/13(월), 8/10(월)", time: "19:30-21:30",
+    location: "시청역 오아시스덕수궁", capacity: "7-11명",
+    host: "김재윤 (HFK 대표 @oasis_jaeyoon)",
+    intro: "세상에는 해변의 모래알만큼 많은 와인이 있다고 하죠. 혼자서는 평생 마셔도 다 경험하기 어렵지만, 함께라면 이야기가 달라집니다.\n\n와인 소사이어티는 매달 하나의 주제를 정해 여러 종류의 와인을 '조금씩, 다양하게' 시음해보는 모임입니다. 한자리에서 여러 와인을 나눠 마시며 와인의 세계를 넓히고, 서로의 취향과 경험도 알아가는 시간.\n\n* 호스트가 주제를 정하고 와인을 준비하는 방식으로 운영합니다. 참여하는 분들은 편하게 와서 다양한 와인을 시음하고 즐기시면 됩니다.\n\n[운영방식]\n- 매달 다른 주제로 블라인드 테이스팅을 합니다. 시음 후 어울릴 거 같은 가벼운 음식을 시켜서 페어링해봅니다. (n 정산)\n- 돌아가며 서포터(간식 준비, 청소 뒷정리) 역할을 합니다.\n- 1달에 1번 정모\n- 디파짓 3만원"
+  },
+  {
+    id: "b", value: "b-보드게임클럽", name: "보드게임클럽", season: "11번째 시즌",
+    status: "마감",
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "7/1(수), 7/22(수), 8/19(수)", time: "19:30-21:30",
+    location: "시청역 소정동", capacity: "6명",
+    host: "박여민 (봄바람 기획자 @djffotime)",
+    intro: "2026년을 맞아 보드게임 클럽이 보다 정교해졌습니다. 커피숍의 주인이나 도굴꾼, 무역상이 되어보는 등 조금 더 테마가 깊고 몰입감이 필요한 게임에 도전해 봅니다.\n\n[운영방식]\n- 함께 모여 보드게임을 하며 인간의 심리와 승리의 전략을 탐구해 봅니다.\n- 1달에 1번 정모\n- 디파짓 3만원\n\n호스트: 스토리텔링 컴퍼니 봄바람의 기획자로 일하고 있는 박여민님. 가끔 보드게임 테마에 대한 글을 쓰기도 합니다. @djffotime / 보드게임 붐은 온다 @roll.and.live"
+  },
+  {
+    id: "c", value: "c-기획자의북소사이어티", name: "기획자의 북 소사이어티", season: "5번째 시즌",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/28(일), 7/26(일), 8/30(일)", time: "10:30-12:30",
+    location: "시청역 소정동", capacity: "8명",
+    host: "김재윤 (HFK 대표 @oasis_jaeyoon)",
+    intro: "기획자는 늘 더 나은 가능성을 상상하는 사람입니다. 하지만 끊임없는 실행 속에서 정작 자신만의 생각을 정리할 여유는 사라지곤 하죠.\n\n기획자의 북 소사이어티는 책을 매개로 기획자들이 모여 사유하고, 대화하며, 다시 영감을 얻는 독서 모임입니다. 혼자 읽을 때는 지나쳤던 문장도 함께 읽으면 새로운 기획의 단서가 됩니다.\n\n* 여름에는 '공간'을 주제로 3권을 읽고 생각을 나눕니다.\n6월: 《공간력 수업》, 박진배\n7월: 《내가 사랑한 공간들》, 윤광준\n8월: 《공간은 전략이다》, 이승윤\n\n[운영방식]\n- 1달에 1권의 책을 읽고 1번 정모\n- 디파짓 6만원\n\n[신청동기]\n- 여름시즌에는 '공간'을 주제로 진행합니다. 자신이 읽었던 책 중에서 '공간' 관련해서 추천하고 싶은 책이 있다면 남겨주세요."
+  },
+  {
+    id: "d", value: "d-유명하지않은사람들의에세이클럽", name: "유명하지 않은 사람들의 에세이 클럽", season: "2번째 시즌",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/20(토), 7/18(토), 8/22(토)", time: "18:00-20:00",
+    location: "시청역 오아시스덕수궁", capacity: "11명",
+    host: "이슬기 (HFK 매니저 @seulki.log)",
+    intro: "'일기도 언젠가 누군가 봐주겠지, 상정하는 마음 없으면 안 써요. 봐줬으면 하는 마음, 쓰는 모든 행위는 봐줬으면 하는 마음을 깔고 시작해요'\n\n《모두가 자신의 무가치함과 싸우고 있다》 8화 황진만의 대사입니다.\n\n생각을 정리하거나 남기고 싶을 때 우리는 글을 쓰게 됩니다. 그러나 그 글을 읽어주는 사람이 없다면, 글쓰기 습관은 오래 지속되기 어렵습니다. 내가 쓰고 싶은 글, 쓸 수 있는 글, 잘 읽히는 글을 꾸준히 써내려면, 결국 누군가 내 글을 읽어줘야 합니다. '유명하지 않은 사람들의 에세이 클럽' 멤버들은 서로의 첫 독자가 됩니다. 유명하지 않아도 내 글을 읽어줄 사람들을 만나고 싶은 멤버를 초대합니다.\n\n[운영방식]\n- 1달에 1번 자신이 쓰고 싶은 주제에 대해 2천자 내외 에세이 글을 쓰고 공유합니다.\n- 1달에 1번 정모\n- 디파짓 6만원\n\n호스트: 이슬기 (HFK 매니저 @seulki.log). 직장과 분리불안이 없는 사람. 춘천에 살며 정동에서 일하는 삶을 좋아한다. 직주 근접을 좋아하지 않아 이미 큰 돈을 벌었다고 생각한다."
+  },
+  {
+    id: "e", value: "e-벽돌책완독클럽", name: "벽돌책 완독클럽", season: "2번째 시즌",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/15(월), 7/20(월), 8/24(월)", time: "19:30-21:30",
+    location: "시청역 오아시스덕수궁", capacity: "12명",
+    host: "성건우 (현대차 사업개발)",
+    intro: "라면 받침대로 쓰기 좋은 책들.. 책꽂이에 꽂혀 있으면 있어 보이는 책들.. 그래도 언젠가는 읽어봐야지 했던 벽돌 같은 책들.. 이제 같이 읽어볼 시간입니다. 석 달 동안 딱 '한 권', 서로 으쌰으쌰하면서 같이 완독해보아요. 모여서 질문도 던지고, 올해를 회고할 때 '그래, 그래도 올해는 이 책이라도 읽었지!'라고 뿌듯해할 수 있길 기대합니다.\n\n[운영방식]\n- 석 달 동안 벽돌 같은 책(600쪽 이상) 딱 한 권을 완독합니다. 지난 시즌 《코스모스》에 이어, 석 달 동안 함께 새로운 벽돌깨기하실 분들을 구합니다. 첫번째 시간에 모여서 어떤 책을 읽을지 결정할 예정이에요.\n- 디파짓 6만원\n\n호스트: 성건우 (현대차 사업개발). 겨울에는 손 끝에서 귤 냄새가, 봄여름가을에는 책 냄새가 나는 사람이고 싶은 성건우입니다. 책의 주제, 분야, 분량 가리지 않고 다양하게 읽는 잡식성 독자."
+  },
+  {
+    id: "f", value: "f-사부작명상클럽", name: "사부작 명상 클럽", season: "2번째 시즌",
+    status: "마감",
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/16(화), 7/14(화), 8/11(화)", time: "19:30-21:30",
+    location: "[u]합정역 사이시옷[/u]", capacity: "8명",
+    host: "정주환 (테이블그라피 대표 @tablegraphy)",
+    intro: "핸드폰을 내려놓고 무언가에 온전히 집중해서 보내는 시간은 그것만으로도 명상이 됩니다. 잠시 일상을 떠나 사부작사부작 이것저것 만들어 봅니다. (소액의 재료비가 발생할 수 있습니다)\n\n[운영방식]\n- 이것저것 손으로 만들며 대화를 나눕니다. (클레이 자석 만들기, 디폼블럭 키링 만들기, 색종이로 표현하기, 커피 드립백 만들기, 레이어 사진 액자 만들기 등 다양한 활동 중에 3가지를 선택해 진행합니다)\n- 디파짓 3만원\n\n호스트: 정주환 (테이블그라피 대표). 뭐든 직접 만드는 걸 좋아합니다. @tablegraphy"
+  },
+  {
+    id: "g", value: "g-또갈집", name: "또갈집", season: "2번째 시즌",
+    status: "마감",
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/14(일), 7/5(일), 8/2(일)", time: "오전",
+    location: "대중교통으로 갈 수 있는 곳", capacity: "4-8명",
+    host: "정주환 (테이블그라피 대표 @tablegraphy)",
+    intro: "누군가에겐 익숙한 골목이 나에겐 낯선 여행지가 되기도 합니다. 누군가의 또간집이 나의 또갈집이 될 수 있을까요? (이번 시즌은 대중교통으로 갈 수 있는 곳에 다녀봅니다)\n\n[운영방식]\n- 나만의 맛집을 중심으로 동네 탐방을 합니다.\n- 디파짓 3만원\n\n호스트: 정주환 (테이블그라피 대표). 여럿이 함께하는 걸 좋아하는 내향인입니다. @tablegraphy"
+  },
+  {
+    id: "h", value: "h-어드민나이트", name: "어드민 나이트", season: "2번째 시즌",
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/30(화), 7/28(화), 8/25(화)", time: "19:30-21:30",
+    location: "시청역 소정동", capacity: "8명",
+    host: "신청자 중 호스트 선정",
+    intro: "여러분, 혹시 이런 생각 해본 적 없으신가요?\n'아, 미루고 미뤘던 구독 서비스 해지해야 하는데...'\n'메일함에 쌓인 뉴스레터 언제 다 지우지?'\n'읽을려고 저장해둔 콘텐츠들 날 잡아서 한 번에 읽어야지'\n머릿속 한구석을 차지하고 있는 '귀찮은 일들(Admin)', 혼자 하려면 끝도 없고 지루하지만, HFK 멤버들과 함께라면 '끝낼 수 있는 즐거운 미션'이 됩니다.\n\n어드민 나이트란?\n귀찮아서 자꾸만 미루게 되는 행정 업무들을 한자리에 모여 함께(Body Doubling) 끝내버리는 생산성 이벤트입니다. 옆에서 누군가 열심히 일하는 모습을 보면, 나도 덩달아 집중하게 되는 마법의 시간.\n\n이런 일을 처리합니다 (예시)\n- 쌓인 메일함 정리 (스팸 및 뉴스레터 비우기)\n- 잊고 있던 구독 서비스 해지 및 결제 내역 확인\n- 디지털 기기 사진/파일 정리 및 백업\n- 병원/미용실 예약 및 각종 회원정보 업데이트\n- 그 외 '언젠가 해야지' 하고 미뤄둔 모든 소소한 업무\n\n진행 방식\n1. 업무 선언: 모이자마자 오늘 끝낼 업무 리스트를 가볍게 공유합니다.\n2. Deep Work 타임: 90분간 음악을 배경 삼아 각자 집중해서 일을 처리합니다. (대화 금지)\n3. 보상 타임: 미션을 마친 후, 가벼운 맥주/음료와 함께 서로의 '해방감'을 공유하며 마무리합니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 디파짓 3만원\n\n* 신청자 중 호스트가 선정됩니다."
+  },
+  {
+    id: "i", value: "i-AI모각작", name: "AI 모각작", season: "",
+    status: "마감",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/20(토), 7/18(토), 8/29(토)", time: "14:00-18:00",
+    location: "시청역 오아시스덕수궁", capacity: "11명",
+    host: "김준영 (@fearless.peerless)",
+    intro: "머리가 아닌, 토큰을 쓰는 시대. AI로 뭐가 가능하고 뭐가 불가능한지를 아는 것만이 이 시기에 가장 긴요한 지성이 아닐까 싶습니다.\n\n배워서 쓰는게 아닌, 쓰면서 배우는 Learning by doing에 공감하시는 분, 내 집중력을 붙잡아둘 시공간과 사람들이 필요하신 분, 이상하게 혼자 있으면 집중 안되는 성인ADHD 대환영.\n\n[운영방식]\n- 1달에 1번 정모\n1) AI와 함께 진행 중인 업무, 사이드 프로젝트, 콘텐츠 제작, 공부 등을 따로 또 같이 합니다.\n2) 작업 중간에는 서로의 활용법과 프롬프트를 공유하고, AI를 활용한 문제 해결 사례를 나눕니다.\n3) 맛있는 대화와 간식/식사를 나눕니다.\n- 디파짓 6만원\n\n호스트: 김준영 (@fearless.peerless). AI 전략 업무를 하면서 페이퍼와 터미널 사이의 괴리를 실감했습니다. 지금은 팀의 AX 업무를 주도하고, 일상의 불편들을 AI로 해소하면서, AI와 동고동락하고 있습니다."
+  },
+  {
+    id: "j", value: "j-서울북모닝클럽", name: "서울 북모닝 클럽", season: "",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/21(일), 7/19(일), 8/23(일)", time: "10:30-12:30",
+    location: "서울 시내 카페", capacity: "8명",
+    host: "신청자 중 호스트 선정",
+    intro: "주말 아침, 책 한 권과 함께 서울의 카페에 모입니다. 바쁜 일상 속에서 잠시 핸드폰을 내려놓고 책에 집중하는 시간을 가져봅니다. 책이 끝나지 않아도 괜찮습니다. 중요한 것은 읽는 양보다 읽는 시간을 만드는 것.\n\n30분 동안 각자 책을 읽고, 15분 동안 읽은 내용이나 떠오른 생각을 가볍게 나눕니다. 그리고 다시 30분 동안 책을 읽고, 15분 동안 대화를 나눕니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 서울의 다양한 카페에 모여 각자 가져온 책을 읽습니다.\n- 30분 독서 → 15분 대화 → 30분 독서 → 15분 대화 방식으로 진행됩니다.\n- 디파짓 6만원\n\n* 신청자 중 호스트가 선정됩니다."
+  },
+  {
+    id: "k", value: "k-정동바이브코딩클럽", name: "정동 바이브코딩 클럽", season: "",
+    status: "마감",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/21(일), 7/19(일), 8/23(일)", time: "14:00-18:00",
+    location: "시청역 소정동", capacity: "11명",
+    host: "신청자 중 호스트 선정",
+    intro: "AI 시대에는 아이디어보다 실행이 중요해졌습니다. 예전에는 서비스를 만들려면 개발자를 만나야 했고, 앱을 만들려면 코딩을 배워야 했습니다. 하지만 이제는 AI와 함께라면 누구나 생각을 결과물로 만들 수 있는 시대가 되었습니다.\n\n문제는 기술이 아니라 시간입니다. 정동 바이브코딩 클럽은 한 달에 한 번, 4시간 동안 오롯이 만들기에 집중하는 모임입니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 각자 만들고 싶은 프로젝트를 가져옵니다.\n- 에이전틱 AI 툴을 활용해 자유롭게 제작합니다.\n- 4시간 동안 집중 작업을 진행합니다.\n- 마지막에는 결과물 또는 배운 점을 짧게 공유합니다.\n- 디파짓 6만원\n\n* 신청자 중 호스트가 선정됩니다."
+  },
+  {
+    id: "l", value: "l-북적북적교환소", name: "북적북적 교환소", season: "",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/27(토), 7/25(토), 8/22(토)", time: "14:30-16:30",
+    location: "시청역", capacity: "11명",
+    host: "서영인 (CJ제일제당 마케터 @elenaseo.kr)",
+    intro: "책 한 권으로 책 세 권 읽는 방법 = 북적북적 교환소. 한 달에 한 번 오프라인으로 모여 책을 교환하고 책을 읽는 시간을 가집니다. 나의 책장에 잠들어 있는, 클럽 친구에게 소개할, 세 달 동안 여행을 떠날 책 1권만 준비해 오세요.\n\n여름시즌 동안 총 2번, 책을 교환하여 읽습니다. 내가 가져온 책은 시즌 동안 2명의 독자를 만나고 3번째 모임에서 다시 나에게 돌아옵니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 한 달에 한 번 랜덤 책교환\n- 디파짓 6만원\n\n호스트: 서영인 (CJ제일제당 마케터 @elenaseo.kr). 책 사고 안읽기가 취미인 사람. 이번 여름 세 권 만이라도 읽어봅시다."
+  },
+  {
+    id: "m", value: "m-서울글쓰기리듬클럽", name: "서울 글쓰기리듬 클럽", season: "",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/28(일), 7/26(일), 8/30(일)", time: "10:30-12:30",
+    location: "서울 시내 카페", capacity: "8명",
+    host: "신청자 중 호스트 선정",
+    intro: "글을 쓰고 싶다고 생각하는 사람은 많습니다. 하지만 막상 혼자 시간을 내어 노트북을 열고, 생각을 정리하고, 한 편의 글을 완성하는 일은 쉽지 않습니다.\n\n서울 글쓰기리듬 클럽은 한 달에 한 번, 서울의 카페에 모여 글을 쓰는 모임입니다.\n\n모임이 시작되면 오늘 어떤 글을 쓸지 간단히 공유합니다. 그리고 90분 동안 각자 글을 씁니다. 에세이도 좋고, 뉴스레터도 좋고, 블로그 글도 좋고, 책 원고도 좋습니다. 주제는 자유입니다.\n\n중요한 것은 잘 쓰는 것이 아니라 끝까지 써보는 것입니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 90분 동안 각자 글쓰기에 집중합니다.\n- 이후 글쓰기 경험과 생각을 나누는 대화를 진행합니다.\n- 디파짓 6만원\n\n* 신청자 중 호스트가 선정됩니다."
+  },
+  {
+    id: "n", value: "n-바이브마케터클럽", name: "바이브마케터 클럽", season: "",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/28(일), 7/26(일), 8/30(일)", time: "14:00-18:00",
+    location: "시청역 소정동", capacity: "8명",
+    host: "신청자 중 호스트 선정",
+    intro: "마케팅도 이제는 직접 만들어보는 시대입니다. 예전에는 아이디어를 내고 개발팀에 요청해야 했습니다. 하지만 이제는 마케터도 AI와 함께 직접 랜딩페이지를 만들고, 업무를 자동화하고, 간단한 서비스를 구현할 수 있습니다.\n\n중요한 것은 코딩 실력이 아닙니다. 문제를 발견하고, 빠르게 실험하고, 직접 만들어보는 실행력입니다.\n\n바이브마케터 클럽은 마케터들이 모여 AI와 함께 무언가를 만드는 모임입니다.\n\n[운영방식]\n- 1달에 1번 정모\n- AI 툴(ChatGPT, Claude, Cursor, Lovable, Replit 등)을 활용해 자유롭게 제작합니다.\n- 3~4시간 동안 집중 작업을 진행합니다.\n- 디파짓 6만원\n\n* 신청자 중 호스트가 선정됩니다."
+  },
+  {
+    id: "o", value: "o-부케빌더스", name: "부케 빌더스", season: "",
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "6/29(월), 7/27(월), 8/24(월)", time: "19:30-21:30",
+    location: "시청역 소정동", capacity: "8명",
+    host: "박아란 (화물차 보험회사 기획자 @rannyy._.p)",
+    intro: "혼자서는 자꾸 미루게 되는 N잡과 사이드 프로젝트, 강제로라도 실행하기 위해 모입니다. 거창하지 않아도 좋습니다. 서로의 아이디어에 피드백을 주고받으며 나의 '부캐'를 함께 빌드업 해보아요.\n\n아이디어는 있지만 시작을 못 해서 폴더만 쌓여가는 분, 이미 뭔가 끄적이고는 있지만 함께 피드백을 주고받으며 시너지를 내고 싶은 분들 함께해요.\n\n[운영방식]\n- 1달에 1번 정모\n- 매달 함께 모여 각자 그달의 목표를 설정하고, 실행 후 함께 피드백을 주고 받습니다.\n- 디파짓 6만원\n\n호스트: 박아란 (화물차 보험회사 기획자 @rannyy._.p). 본캐는 화물차 보험회사에서 근무하는 직장인이며, 부캐는 화물운송 뉴스레터 '핫트랜스'의 제작자입니다."
+  },
+  {
+    id: "p", value: "p-월간챌린지클럽", name: "월간 챌린지 클럽", season: "",
+    hidden: true,
+    mode: "오프라인", type: "스터디", deposit: "6만원",
+    schedule: "7/4(토), 8/1(토), 8/29(토)", time: "14:30-16:30",
+    location: "시청역 소정동", capacity: "8명",
+    host: "권도현 (미래파 대표 @the_testman)",
+    intro: "평소 이것만큼은 해보자는 거 하나만 챌린지하기. 0회여도 좋습니다만, 한 번씩 해보면 좋습니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 개인 목표를 설정하여 한달 간 최소 1회 챌린지를 실행한 후 모임일까지 챌린지 내용을 정리, 회고를 작성하여 서로 공유합니다.\n- 디파짓 6만원\n\n호스트: 권도현 (미래파 대표). 하나하나 해나가려는 사람 @the_testman"
+  },
+  {
+    id: "q", value: "q-서울살래", name: "서울살래", season: "",
+    status: "마감",
+    mode: "오프라인", type: "취미", deposit: "6만원",
+    schedule: "6/14(일), 7/12(일), 8/9(일)", time: "09:00-14:00",
+    location: "별도 공지", capacity: "8명",
+    host: "최소연 (포스코 기획자 @soyeon_choi)",
+    intro: "서울에 내 집 마련, 어디서 시작해야 할지 막막한 분들, 같이 위장 임장 떠나요. 시세표 보기 전에 그 동네를 먼저 걸어보는 모임입니다. 부동산 초보의 무작정 발품팔기 모임입니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 매달 서울 한 동네를 정해 '위장 임장'을 떠납니다. 단골 카페에 앉아보고, 마트 장을 봐보고, 골목을 어슬렁거리며 '여기서 살면 어떨까?'를 몸으로 느껴봅니다.\n- 디파짓 6만원\n\n호스트: 최소연 (포스코 기획자 @soyeon_choi). 얼떨결에 선바잉 후패닉에 빠져버린 부동산 초짜입니다."
+  },
+  {
+    id: "r", value: "r-향신료미식클럽", name: "향신료 미식 클럽", season: "",
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/19(금), 7/10(금), 8/7(금)", time: "19:00-22:00",
+    location: "서울 시내 레스토랑", capacity: "8명",
+    host: "신청자 중 호스트 선정",
+    intro: "좋은 음식은 배를 채우고, 좋은 미식은 취향을 넓혀줍니다.\n\n우리는 매일 무언가를 먹지만, 무엇을 왜 좋아하는지 깊이 생각해볼 기회는 많지 않습니다. 같은 음식을 먹어도 누군가는 향을 기억하고, 누군가는 공간을 기억하며, 누군가는 함께한 사람을 기억합니다.\n\n향신료 미식 클럽은 서울 곳곳의 다양한 미식을 경험하며 각자의 취향을 탐구하는 모임입니다.\n\n한 달에 한 번, 한 식탁에 모여 새로운 맛을 경험합니다. 중요한 것은 맛집을 찾아다니는 것이 아니라, 취향을 발견하는 것입니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 매월 서울의 다양한 레스토랑, 카페, 바 등을 함께 방문합니다.\n- 식사 비용은 별도입니다.\n- 디파짓 3만원\n\n* 신청자 중 호스트가 선정됩니다."
+  },
+  {
+    id: "s", value: "s-로스팅랑데부", name: "로스팅 랑데부", season: "",
+    hidden: true,
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/20(토), 7/11(토), 8/8(토)", time: "14:30-16:30",
+    location: "시청역", capacity: "6명",
+    host: "서영인 (CJ제일제당 마케터 @elenaseo.kr)",
+    intro: "한 달에 한 번, 좋아하는 원두 교환. 각자 좋아하는 원두를 한팩씩 가져와 소개하고, 클럽원들과 소분하여 교환하는 모임입니다.\n\n집에서 드립커피를 종종 내려먹는, 좋아하는 카페의 원두를 사고싶은데 한팩이 너무 많아서 고민되고, 한번에 여러가지 원두를 경험해보고 싶으신 분들 모이세요. 원두 소분에 필요한 도구들을 호스트가 제공하고 소정의 참여비가 있습니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 디파짓 3만원\n\n호스트: 서영인 (CJ제일제당 마케터 @elenaseo.kr). 새로운 걸 탐구하고 사람들과 나누는 걸 좋아해요."
+  },
+  {
+    id: "t", value: "t-요즘난어떻게살고있지", name: "요즘 난 어떻게 살고 있지?", season: "",
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/23(화), 7/21(화), 8/18(화)", time: "19:30-21:30",
+    location: "시청역", capacity: "11명",
+    host: "김동우 (메가존 재무전략)",
+    intro: "사람들은 일, 커리어, 관계에 대한 이야기는 자주 나누지만 정작 '요즘 나는 어떻게 살고 있는지'에 대해서는 생각보다 이야기할 기회가 많지 않습니다.\n\n이 클럽은 매달 하나의 마음 질문을 중심으로 각자의 경험과 생각을 나누는 모임입니다.\n\n정답도 조언도 필요하지 않습니다. 그저 서로의 이야기를 들으며 내가 놓치고 있던 나의 모습을 발견하고, 다른 사람들의 삶을 통해 새로운 시선을 얻는 시간을 만들어보려 합니다.\n\n예를 들어 이런 질문들을 함께 이야기할 수 있습니다.\n* 나는 언제 가장 나답다고 느끼는가?\n* 요즘 나를 가장 많이 지치게 하는 것은 무엇인가?\n* 어른이 된다는 것은 무엇일까?\n* 나는 왜 바쁜데 공허할까?\n* 지금의 나는 1년 전보다 행복해졌을까?\n\n[운영방식]\n- 1달에 1번 정모\n- 디파짓 3만원\n\n호스트: 김동우 (메가존 재무전략). 숫자와 데이터로 일하는 직장인이지만, 정작 사람을 움직이는 것은 숫자가 아니라 마음과 관계라는 생각을 자주 합니다."
+  },
+  {
+    id: "u", value: "u-월간가위풀", name: "월간 가위풀", season: "",
+    hidden: true,
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/27(토), 7/25(토), 8/22(토)", time: "14:30-16:30",
+    location: "시청역", capacity: "8명",
+    host: "문다영 (메타 마케터 @doux_doux_v)",
+    intro: "어른이 되면 생각보다 두 손으로 노는 일이 줄어들죠. 월간 가위풀은 한 달에 한 번 모여 종이를 오리고, 붙이고, 쓰고, 돌아보며 한 권의 Zine(미니북)을 만드는 모임입니다.\n\n잘 만들 필요도, 글을 잘 쓸 필요도 없어요. 손을 움직이다 보면 생각이 정리되고, 한 달의 기억이 한 권의 책이 됩니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 오리고 붙이고 쓰며 나만의 Zine 만들기\n- 한 달을 돌아보고 한 권의 기록으로 엮기\n- 디파짓 3만원\n\n호스트: 문다영 (메타 마케터 @doux_doux_v). 낮에는 Meta에서 일하고, 퇴근 후에는 종이와 펜으로 기록합니다. 디지털 환경 속에서 일하면서도 손으로 만들고 기록하는 시간을 좋아해요."
+  },
+  {
+    id: "v", value: "v-일본와이너리투어", name: "일본 와이너리 투어", season: "",
+    status: "마감",
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/29(월), 7/27(월), 8/31(월)", time: "19:30-21:30",
+    location: "시청역", capacity: "8명",
+    host: "김재윤 (HFK 대표 @oasis_jaeyoon)",
+    intro: "프랑스, 이탈리아, 미국 와인은 익숙하지만 일본 와인에 대해서는 잘 모르는 경우가 많습니다. 하지만 최근 일본 와인은 세계적으로 주목받으며 자신만의 개성과 철학을 만들어가고 있습니다.\n\n일본 와이너리 투어는 HFK의 와인 소사이어티에서 파생된 스핀오프 클럽입니다.\n\n한 달에 한 번 모여 일본 와인을 중심으로 공부하고 시음합니다. 그리고 가을에는 일본 현지로 떠납니다.\n\n[운영방식]\n- 1달에 1번 정모\n- 매월 1회 모여 일본 와인을 시음합니다.\n- 와인 초보자도 참여 가능합니다.\n- 시음 비용은 별도입니다.\n- 가을 시즌에는 일본 와이너리 투어를 진행할 예정입니다. (희망자 참여)\n- 디파짓 3만원\n\n호스트: HFK 대표 김재윤 @oasis_jaeyoon"
+  },
+  {
+    id: "w", value: "w-MindWaves", name: "Mind Waves : 내 마음속의 파도 그리기", season: "",
+    hidden: true,
+    mode: "오프라인", type: "취미", deposit: "2만원",
+    schedule: "7/4(토), 8/1(토)", time: "14:30-17:30",
+    location: "시청역", capacity: "4명",
+    host: "허정은 (LG생활건강 디자이너 @flyjeongeun)",
+    intro: "지금 내 마음은 어떤 파도일까요? 잔잔한 파도, 거친 파도, 반짝이는 윤슬이 담긴 파도까지. 그림 실력과 상관없이 나만의 감정과 이야기를 색과 형태로 표현해보는 작은 예술 실험실입니다. 두 번의 모임을 통해 세상에 하나뿐인 '내 마음속의 파도'를 함께 완성해보아요.\n\n활동 내용: 유화를 활용해 자신의 감정과 이야기를 파도로 표현하는 그림 모임입니다. 1차 모임에서는 어떤 파도를 그릴지 구상하고 스케치 및 밑작업을 진행하며, 2차 모임에서는 작품을 완성합니다.\n\n재료비: 1~2만원 (캔버스 및 일부 재료 포함)\n\n[운영방식]\n- 1달에 1번 정모 (총 2회)\n- 디파짓 2만원\n\n호스트: 허정은 (LG생활건강 디자이너 @flyjeongeun). 15년 차 디자이너로 일하며 틈틈이 파도를 주제로 유화를 그리고 있습니다."
+  },
+  {
+    id: "x", value: "x-흥미찐zine열차", name: "흥미찐Zine 열차", season: "5번째 시즌",
+    status: "마감",
+    mode: "오프라인", type: "취미", deposit: "3만원",
+    schedule: "6/20(토), 7/18(토), 8/22(토)", time: "오전",
+    location: "당일치기 여행지", capacity: "7명",
+    host: "김보경 (금은보화 대표 @kimsoul_)",
+    intro: "AI 디톡스 — 아나바다 여행\n: 굳이 그걸 하러 가는, 비효율의 하루\n\n올여름, 조금 무모하고 뜨겁게 — 제대로 낭만을 느껴보려 합니다.\n\n요즘 우리는 너무 빠르게 추천받고, 너무 쉽게 요약되고, 너무 효율적으로 살아가고 있습니다. 그래서 이번 흥미찐Zine은 조금 다른 방향으로 움직여보려 합니다.\n\n굳이 하루 만에 먼 지역을 다녀오고, 굳이 농장에서 점심 한 끼를 먹고, 굳이 목적 없이 종점까지 가보고, 굳이 오래된 골목과 작은 책방을 들여다보는 여행. 효율만 보면 '왜 그렇게까지 해?' 싶은 것들. 그런데 이상하게, 그런 날들이 오래 기억에 남더라고요.\n\n이번 시즌의 키워드는 AI 디톡스입니다. 거창하게 디지털을 끊는 건 아닙니다. 대신 잠시, 인간 수동모드로 움직여보는 것.\n\n그리고 이번 여행의 부제는 아나바다 여행. 아날로그를 / 나눠쓰고 / 바꿔쓰고 / 다시 꺼내쓰기.\n\n혼자 여행은 조금 외롭고, 단체 여행은 너무 번잡한 사람들을 위해 — 적당히 같이, 적당히 따로 움직이는 하루.\n\n[이런 분께 추천합니다]\n- 멈추면 불안하고 달리면 피곤한 분\n- 요즘 너무 많은 정보를 보고 있는 분\n- 이유는 없는데 자꾸 어딘가 떠나고 싶은 분\n- 큰 자극보다 이상한 것에 끌리는 분\n- '굳이?' 싶은 일을 좋아하는 분\n\n[운영방식]\n- 정모: 6/20(토), 7/18(토), 8/22(토) 오전\n- 인원: 7명\n- 디파짓 3만원\n\n호스트: 김보경 (금은보화 대표 @kimsoul_). 낭만과 사랑을 수집하며 살아가고 있습니다."
+  }
+];
+
+const HOST_OPTS = [
+  "호스트 지원합니다.",
+  "지원은 하지 않지만 제가 맡게 되면 성심성의껏 운영하겠습니다."
+];
+const TARGET_OPTS = [
+  "여름시즌 멤버입니다",
+  "ODS/ODC 멤버입니다",
+  "HFK 파트너 (OB 파트너 포함) 입니다",
+  "비시즌 멤버 후원금 납부 (3개월 18만원) 합니다"
+];
+
+const state = {
+  selected: new Set(),
+  mode: "all",
+  type: "all",
+  query: ""
+};
+
+function escapeHtml(s) {
+  return (s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+function renderRich(s) {
+  return escapeHtml(s).replace(/\[u\]/g, "<u>").replace(/\[\/u\]/g, "</u>");
+}
+
+function renderClubs() {
+  const grid = document.getElementById("clubGrid");
+  grid.innerHTML = "";
+  CLUBS.forEach((club, idx) => {
+    if (club.hidden) return;
+    const card = document.createElement("div");
+    card.className = "club-card" + (club.status ? " disabled" : "");
+    card.dataset.id = club.id;
+    card.dataset.mode = club.mode;
+    card.dataset.type = club.type;
+    card.dataset.status = club.status || "";
+    card.dataset.searchText = (club.name + " " + (club.intro || "") + " " + (club.host || "") + " " + (club.location || "")).toLowerCase();
+
+    const metaItems = [];
+    metaItems.push(`<dt>일정</dt><dd>${renderRich(club.schedule)}</dd>`);
+    if (club.time) metaItems.push(`<dt>시간</dt><dd>${renderRich(club.time)}</dd>`);
+    if (club.location) metaItems.push(`<dt>장소</dt><dd>${renderRich(club.location)}</dd>`);
+    if (club.capacity) metaItems.push(`<dt>정원</dt><dd>${renderRich(club.capacity)}</dd>`);
+    metaItems.push(`<dt>디파짓</dt><dd>${renderRich(club.deposit)}</dd>`);
+    metaItems.push(`<dt>호스트</dt><dd>${renderRich(club.host)}</dd>`);
+
+    const imgUrl = CLUB_IMAGES[idx];
+    const imgHtml = imgUrl ? `<img class="club-image" src="${escapeAttr(imgUrl)}" alt="${escapeAttr(club.name)}" loading="lazy" referrerpolicy="no-referrer">` : "";
+
+    card.innerHTML = `
+      ${imgHtml}
+      <div class="club-card-body">
+        <div class="club-head">
+          <div style="flex:1">
+            <div class="club-title"><span class="club-id">${escapeHtml(club.id)}</span>${escapeHtml(club.name)}</div>
+            ${club.season ? `<div class="club-season">${escapeHtml(club.season)}</div>` : ""}
+          </div>
+          <input type="checkbox" class="club-check" data-value="${escapeAttr(club.value)}" aria-label="${escapeAttr(club.name)} 선택"${club.status ? " disabled" : ""}>
+        </div>
+        <div class="club-tags">
+          <span class="tag tag-${club.mode === '온라인' ? 'online' : 'offline'}">${escapeHtml(club.mode)}</span>
+          <span class="tag tag-${club.type === '챌린지' ? 'challenge' : club.type === '스터디' ? 'study' : 'hobby'}">${escapeHtml(club.type)}형</span>
+          ${club.status ? `<span class="tag tag-${club.status === '마감' ? 'closed' : 'soon'}">${escapeHtml(club.status === '미오픈' ? '오픈 예정' : club.status)}</span>` : ""}
+        </div>
+        <dl class="club-meta">${metaItems.join("")}</dl>
+        <div class="club-actions">
+          <button class="detail-btn" type="button">소개 펼치기 ▾</button>
+        </div>
+        <div class="club-body-full">${renderRich(club.intro).replace(/\n/g, "<br>")}</div>
+      </div>
+    `;
+
+    const check = card.querySelector(".club-check");
+    const detailBtn = card.querySelector(".detail-btn");
+
+    check.addEventListener("change", (e) => {
+      e.stopPropagation();
+      if (club.status) { check.checked = false; return; }
+      if (check.checked) {
+        state.selected.add(club.value);
+        card.classList.add("selected");
+      } else {
+        state.selected.delete(club.value);
+        card.classList.remove("selected");
+      }
+      updateSelectionUI();
+    });
+
+    detailBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const expanded = card.classList.toggle("expanded");
+      detailBtn.textContent = expanded ? "소개 접기 ▴" : "소개 펼치기 ▾";
+    });
+
+    card.addEventListener("click", (e) => {
+      if (e.target === check || e.target === detailBtn) return;
+      if (club.status) return;
+      check.checked = !check.checked;
+      check.dispatchEvent(new Event("change"));
+    });
+
+    grid.appendChild(card);
+  });
+
+  const visibleClubs = CLUBS.filter(c => !c.hidden);
+  document.getElementById("cnt-all").textContent = visibleClubs.length;
+  document.getElementById("cnt-online").textContent = visibleClubs.filter(c => c.mode === "온라인").length;
+  document.getElementById("cnt-offline").textContent = visibleClubs.filter(c => c.mode === "오프라인").length;
+
+  applyFilters();
+}
+
+function applyFilters() {
+  const cards = document.querySelectorAll(".club-card");
+  let visible = 0;
+  cards.forEach(card => {
+    const modeOk = state.mode === "all" || card.dataset.mode === state.mode;
+    const typeOk = state.type === "all" || card.dataset.type === state.type;
+    const queryOk = !state.query || card.dataset.searchText.includes(state.query);
+    if (modeOk && typeOk && queryOk) {
+      card.classList.remove("hidden");
+      visible++;
+    } else {
+      card.classList.add("hidden");
+    }
+  });
+
+  const grid = document.getElementById("clubGrid");
+  let empty = grid.querySelector(".empty-state");
+  if (visible === 0) {
+    if (!empty) {
+      empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.textContent = "조건에 맞는 클럽이 없습니다. 필터를 조정해 보세요.";
+      grid.appendChild(empty);
+    }
+  } else if (empty) {
+    empty.remove();
+  }
+
+  document.getElementById("filterSummary").textContent = `${visible}개 클럽 표시 중`;
+}
+
+function updateSelectionUI() {
+  const summary = document.getElementById("selectedSummary");
+  if (state.selected.size === 0) {
+    summary.classList.add("empty");
+    summary.textContent = "선택한 클럽이 없습니다. 위의 카드에서 클럽을 선택해 주세요.";
+  } else {
+    summary.classList.remove("empty");
+    summary.innerHTML = "";
+    state.selected.forEach(v => {
+      const club = CLUBS.find(c => c.value === v);
+      const chip = document.createElement("span");
+      chip.className = "selected-chip";
+      chip.innerHTML = `<span>${escapeHtml(club.id)}. ${escapeHtml(club.name)}</span><button type="button" class="chip-remove" aria-label="${escapeAttr(club.name)} 삭제">×</button>`;
+      chip.querySelector(".chip-remove").addEventListener("click", () => {
+        state.selected.delete(v);
+        const card = document.querySelector(`.club-card[data-id="${club.id}"]`);
+        if (card) {
+          card.classList.remove("selected");
+          const check = card.querySelector(".club-check");
+          if (check) check.checked = false;
+        }
+        updateSelectionUI();
+      });
+      summary.appendChild(chip);
+    });
+  }
+  document.getElementById("stickyCount").textContent = state.selected.size;
+  document.getElementById("stickyBar").classList.toggle("show", state.selected.size > 0);
+}
+
+document.getElementById("modeFilter").addEventListener("click", (e) => {
+  const chip = e.target.closest(".chip");
+  if (!chip) return;
+  document.querySelectorAll("#modeFilter .chip").forEach(c => c.classList.remove("active"));
+  chip.classList.add("active");
+  state.mode = chip.dataset.mode;
+  applyFilters();
+});
+document.getElementById("typeFilter").addEventListener("click", (e) => {
+  const chip = e.target.closest(".chip");
+  if (!chip) return;
+  document.querySelectorAll("#typeFilter .chip").forEach(c => c.classList.remove("active"));
+  chip.classList.add("active");
+  state.type = chip.dataset.type;
+  applyFilters();
+});
+document.getElementById("searchBox").addEventListener("input", (e) => {
+  state.query = e.target.value.trim().toLowerCase();
+  applyFilters();
+});
+
+document.getElementById("scrollToForm").addEventListener("click", () => {
+  document.getElementById("hfkForm").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+function buildOptions(containerId, items, name, type) {
+  const c = document.getElementById(containerId);
+  items.forEach((v, i) => {
+    const id = containerId + "_" + i;
+    const label = document.createElement("label");
+    label.className = "opt";
+    label.innerHTML = `<input type="${type}" name="${name}" id="${id}" value="${escapeAttr(v)}"><span>${escapeHtml(v)}</span>`;
+    c.appendChild(label);
+  });
+}
+
+buildOptions("host", HOST_OPTS, "host", "radio");
+buildOptions("target", TARGET_OPTS, "target", "radio");
+buildOptions("promise", ["약속합니다."], "promise", "checkbox");
+
+renderClubs();
+
+function showError(key, show) {
+  const e = document.querySelector(`.error[data-for="${key}"]`);
+  if (e) e.classList.toggle("show", show);
+}
+
+function getChecked(name) {
+  return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+}
+
+document.getElementById("hfkForm").addEventListener("submit", function(ev) {
+  ev.preventDefault();
+
+  const clubs = Array.from(state.selected);
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const host = (document.querySelector('input[name="host"]:checked')||{}).value;
+  const motivation = document.getElementById("motivation").value.trim();
+  const target = (document.querySelector('input[name="target"]:checked')||{}).value;
+  const promise = getChecked("promise");
+
+  let ok = true;
+  showError("clubs", clubs.length === 0); ok = ok && clubs.length > 0;
+  showError("name", !name); ok = ok && !!name;
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  showError("email", !emailOk); ok = ok && emailOk;
+  showError("phone", !phone); ok = ok && !!phone;
+  showError("host", !host); ok = ok && !!host;
+  showError("motivation", !motivation); ok = ok && !!motivation;
+  showError("target", !target); ok = ok && !!target;
+  showError("promise", promise.length === 0); ok = ok && promise.length > 0;
+
+  if (!ok) {
+    const firstErr = document.querySelector(".error.show");
+    if (firstErr) firstErr.scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+
+  const f = document.createElement("form");
+  f.action = FORM_ACTION;
+  f.method = "POST";
+  f.target = "hidden_iframe";
+  f.style.display = "none";
+
+  function add(name, value) {
+    const inp = document.createElement("input");
+    inp.type = "hidden"; inp.name = name; inp.value = value;
+    f.appendChild(inp);
+  }
+
+  clubs.forEach(v => add(ENTRY.clubs, v));
+  add(ENTRY.name, name);
+  add(ENTRY.email, email);
+  add(ENTRY.phone, phone);
+  add(ENTRY.host, host);
+  add(ENTRY.motivation, motivation);
+  add(ENTRY.target, target);
+  promise.forEach(v => add(ENTRY.promise, v));
+
+  document.body.appendChild(f);
+
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "제출 중...";
+  window._submitted = true;
+
+  f.submit();
+});
+</script>
+</body>
+</html>
