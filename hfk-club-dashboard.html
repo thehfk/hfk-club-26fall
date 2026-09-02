@@ -684,7 +684,8 @@
 <script>
 // === 설정 ===
 // Google Sheet에서 파일 → 공유 → 웹에 게시 → CSV 형식으로 게시한 URL
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRONuqty-0ofz0386iwiXx8cARfD0RJFUo3HH0BWNKiOLC4q14zL8TxFXGXL-KMyZzmYbBb_hpZSr9_/pub?gid=1810135781&single=true&output=csv";
+// clubs.json에서 로드되는 현재 시즌명 (예: "26가을"). listApplicants API 호출에 사용
+let SEASON = "";
 // 대시보드 접근 암호
 const ACCESS_PW = "hfk1004";
 
@@ -787,6 +788,7 @@ async function loadData() {
     try {
       const cr = await fetch('./data/clubs.json?t=' + Date.now());
       const cd = await cr.json();
+      SEASON = cd.season || "";
       for (const club of (cd.clubs || [])) {
         // capacity: "8명" → 8, "7-11명" → 11 (최대), null → null
         let cap = null;
@@ -812,15 +814,13 @@ async function loadData() {
   btn.disabled = true;
   btn.textContent = "불러오는 중...";
   try {
-    if (CSV_URL.startsWith("REPLACE")) {
-      throw new Error("CSV_URL을 설정해 주세요 (hfk-club-dashboard.html 상단)");
+    if (!SEASON) {
+      throw new Error("시즌 정보를 clubs.json에서 읽지 못했습니다");
     }
-    const res = await fetch(CSV_URL + "&_t=" + Date.now());
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const text = await res.text();
-    const rows = parseCSV(text);
-    state.headers = rows[0] || [];
-    state.rows = rows.slice(1).filter(r => r.length > 1 && r[0]);
+    const result = await callChannelAPI("listApplicants", { season: SEASON });
+    if (!result.ok) throw new Error(result.error || "listApplicants failed");
+    state.headers = result.headers || [];
+    state.rows = (result.rows || []).filter(r => r.length > 1 && r[0]);
     document.getElementById("lastUpdate").textContent = "업데이트: " + new Date().toLocaleString("ko-KR");
     render();
   } catch (e) {
