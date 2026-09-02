@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HFK 26여름 클럽 신청 현황</title>
+<title>HFK 26가을 클럽 신청 현황</title>
 <style>
   :root {
     --hfk-red: #980000;
@@ -229,7 +229,29 @@
   }
   .channel-btn:hover { background: #7a0000; }
   .channel-btn:disabled { background: #bbb; cursor: not-allowed; }
-  .channel-btn.secondary {
+  .channel-name-input {
+  border: 1px solid var(--line-strong, #d0d0d0);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font: inherit;
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 13px;
+  color: var(--hfk-red, #980000);
+  background: #fff;
+  min-width: 260px;
+}
+.channel-name-input:focus {
+  outline: none;
+  border-color: var(--hfk-red, #980000);
+  box-shadow: 0 0 0 3px rgba(152, 0, 0, 0.12);
+}
+.channel-prefix {
+  color: var(--hfk-red, #980000);
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 13px;
+  margin-right: 2px;
+}
+.channel-btn.secondary {
     background: #fff;
     color: var(--hfk-red);
     border: 1px solid var(--hfk-red);
@@ -590,7 +612,7 @@
 
 <div class="wrap" id="dashboard" style="display:none">
   <header>
-    <h1>HFK 26여름시즌 클럽 신청 현황</h1>
+    <h1>HFK 26가을시즌 클럽 신청 현황</h1>
     <div class="header-meta">
       <span id="lastUpdate"></span>
       <button class="refresh-btn" id="refreshBtn">새로고침</button>
@@ -678,7 +700,7 @@ const CHANNEL_STATE_KEY = "hfk-club-channels";
 // 초대·미선정 처리 상태 localStorage 키
 const INVITE_STATE_KEY = "hfk-club-invited";
 
-// 26여름 멤버 명단 (HFK사람들 시트 기준, 2026-06-11 스냅샷)
+// 26가을 멤버 명단 (HFK사람들 시트 기준, 갱신 예정)
 const MEMBER_STATUS = {
   "박초희":"first","임이랑":"first","이호준":"first","오주영":"first","손지희":"first","이보라":"first","이유라":"first","강주언":"first","이성규":"first","김지원":"first","유은지":"first","최민정":"first","한소희":"first","김유석":"first","서연주":"first","김혜미":"first","김주현":"first","이정민":"first","유다솜":"first","박지영":"first","김태림":"first","임세리":"first","김진":"first","한승훈":"first","배진현":"first","김아영":"first","최경원":"first","이예현":"first","안현우":"first","서지희":"first","최성우":"first","김학서":"first","박혜봉":"first","김승연":"first","육근혜":"first","유영이":"first","주영은":"first","이선혜":"first",
   "금가람":"re","유통민":"re","정나리":"re","김지현":"re","박정연":"re","안혜연":"re","김화진":"re","김희원":"re","김유일":"re","박아란":"re","김하나":"re","임성우":"re","이세림":"re","손현선":"re","강주현":"re","권오림":"re","손상희":"re","권수은":"re","임아영":"re","윤왕교":"re","김경아":"re","박승표":"re","장재형":"re","강혜원":"re","남은경":"re","허미현":"re","김세아":"re","김한울이":"re","돈명진":"re","원정현":"re","이홍진":"re","권도현":"re","신상호":"re","송선혜":"re","류채희":"re","이수림":"re","이정준":"re","김정민":"re","김혜리":"re","심수정":"re","홍수경":"re","전신애":"re","이현주":"re","서영인":"re","박혜림":"re","문윤선":"re","김민주":"re","홍은지":"re","허재영":"re","제정경":"re","최지영":"re","신윤아":"re","김선아":"re","조지현":"re","최소연":"re","한미정":"re","박미서":"re","김하정":"re","김남경":"re","조혜빈":"re","윤소현":"re","이수연":"re","한다희":"re","박여민":"re","홍원정":"re","윤아영":"re","진선라":"re","김민경":"re","주명선":"re","김미정":"re","도민우":"re","하현주":"re","박지원":"re","박시연":"re","나종원":"re","박재희":"re","김서현":"re","송서현":"re","방승환":"re","김혜림":"re","주선경":"re","고예환":"re","김한나":"re","서효정":"re","권나윤":"re","김수연":"re","배의열":"re","김규리":"re","김지애":"re","이주영":"re","선우정":"re","이수민":"re","김준형":"re","이효민":"re","김보경":"re","허재필":"re","박문희":"re",
@@ -694,39 +716,8 @@ function memberStatusLabel(s) {
   return s === "first" ? "첫등록" : s === "re" ? "재등록" : s === "partner" ? "파트너" : "미확인";
 }
 
-// 클럽 정원 정보 (hfk-club-form.html과 동기화)
-const CLUB_INFO = {
-  "0-주간회고클럽":              { id: "0", name: "주간회고클럽", mode: "온라인", cap: null },
-  "1-HBR챌린져스":               { id: "1", name: "HBR 챌린져스", mode: "온라인", cap: null },
-  "2-필사클럽":                   { id: "2", name: "필사클럽", mode: "온라인", cap: null },
-  "3-문장수집클럽":               { id: "3", name: "문장수집클럽", mode: "온라인", cap: null },
-  "4-차곡차곡SNS클럽":            { id: "4", name: "차곡차곡SNS클럽", mode: "온라인", cap: null },
-  "5-디테일수집클럽":             { id: "5", name: "디테일수집클럽", mode: "온라인", cap: null },
-  "a-와인소사이어티":             { id: "a", name: "와인 소사이어티", mode: "오프라인", cap: 11 },
-  "b-보드게임클럽":               { id: "b", name: "보드게임클럽", mode: "오프라인", cap: 6 },
-  "c-기획자의북소사이어티":       { id: "c", name: "기획자의 북 소사이어티", mode: "오프라인", cap: 8 },
-  "d-유명하지않은사람들의에세이클럽": { id: "d", name: "에세이 클럽", mode: "오프라인", cap: 11 },
-  "e-벽돌책완독클럽":             { id: "e", name: "벽돌책 완독클럽", mode: "오프라인", cap: 12 },
-  "f-사부작명상클럽":             { id: "f", name: "사부작 명상 클럽", mode: "오프라인", cap: 8 },
-  "g-또갈집":                     { id: "g", name: "또갈집", mode: "오프라인", cap: 8 },
-  "h-어드민나이트":               { id: "h", name: "어드민 나이트", mode: "오프라인", cap: 8 },
-  "i-AI모각작":                   { id: "i", name: "AI 모각작", mode: "오프라인", cap: 11 },
-  "j-서울북모닝클럽":             { id: "j", name: "서울 북모닝 클럽", mode: "오프라인", cap: 8 },
-  "k-정동바이브코딩클럽":         { id: "k", name: "정동 바이브코딩 클럽", mode: "오프라인", cap: 11 },
-  "l-북적북적교환소":             { id: "l", name: "북적북적 교환소", mode: "오프라인", cap: 11 },
-  "m-서울글쓰기리듬클럽":         { id: "m", name: "서울 글쓰기리듬 클럽", mode: "오프라인", cap: 8 },
-  "n-바이브마케터클럽":           { id: "n", name: "바이브마케터 클럽", mode: "오프라인", cap: 8 },
-  "o-부케빌더스":                 { id: "o", name: "부케 빌더스", mode: "오프라인", cap: 8 },
-  "p-월간챌린지클럽":             { id: "p", name: "월간 챌린지 클럽", mode: "오프라인", cap: 8 },
-  "q-서울살래":                   { id: "q", name: "서울살래", mode: "오프라인", cap: 8 },
-  "r-향신료미식클럽":             { id: "r", name: "향신료 미식 클럽", mode: "오프라인", cap: 8 },
-  "s-로스팅랑데부":               { id: "s", name: "로스팅 랑데부", mode: "오프라인", cap: 6 },
-  "t-요즘난어떻게살고있지":       { id: "t", name: "요즘 난 어떻게 살고 있지?", mode: "오프라인", cap: 11 },
-  "u-월간가위풀":                 { id: "u", name: "월간 가위풀", mode: "오프라인", cap: 8 },
-  "v-일본와이너리투어":           { id: "v", name: "일본 와이너리 투어", mode: "오프라인", cap: 8 },
-  "w-MindWaves":                  { id: "w", name: "Mind Waves", mode: "오프라인", cap: 4 },
-  "x-흥미찐zine열차":             { id: "x", name: "흥미찐Zine 열차", mode: "오프라인", cap: 7 },
-};
+// 클럽 정원 정보 (data/clubs.json에서 fetch)
+let CLUB_INFO = {};
 
 // === 로그인 게이트 ===
 const LS_KEY = "hfk-dashboard-auth";
@@ -791,6 +782,32 @@ let state = {
 };
 
 async function loadData() {
+  // clubs.json 먼저 로드해서 CLUB_INFO 구성
+  if (Object.keys(CLUB_INFO).length === 0) {
+    try {
+      const cr = await fetch('./data/clubs.json?t=' + Date.now());
+      const cd = await cr.json();
+      for (const club of (cd.clubs || [])) {
+        // capacity: "8명" → 8, "7-11명" → 11 (최대), null → null
+        let cap = null;
+        if (club.capacity) {
+          const m = club.capacity.match(/(\d+)(?:-(\d+))?/);
+          if (m) cap = m[2] ? parseInt(m[2]) : parseInt(m[1]);
+        }
+        CLUB_INFO[club.value] = {
+          id: club.id,
+          name: club.name,
+          mode: club.mode,
+          cap: cap,
+        };
+      }
+    } catch (e) {
+      console.error('clubs.json load failed', e);
+      showToast('클럽 목록 로드 실패: ' + e.message, 'error');
+      return;
+    }
+  }
+
   const btn = document.getElementById("refreshBtn");
   btn.disabled = true;
   btn.textContent = "불러오는 중...";
@@ -1010,7 +1027,7 @@ function buildApplicantsPanel(clubKey, info) {
       <div class="channel-status" id="ch-status-${escapeAttr(clubKey)}">
         ${channelState
           ? `채널 <span class="ok">#${escapeHtml(channelState.name)}</span> 생성됨 (${channelState.id})`
-          : `채널명: <code>#${escapeHtml(channelName)}</code>`}
+          : `채널명: <span class="channel-prefix">#</span><input class="channel-name-input" id="ch-name-${escapeAttr(clubKey)}" value="${escapeAttr(channelName)}" spellcheck="false">`}
       </div>
       ${channelState
         ? `<button class="channel-btn" data-action="invite-selected" data-club="${escapeAttr(clubKey)}">선정 처리 (선택 초대 + 미선정 안내)</button>
@@ -1056,7 +1073,9 @@ function buildApplicantsPanel(clubKey, info) {
       const action = btn.dataset.action;
       const club = btn.dataset.club;
       if (action === "create-channel") {
-        handleCreateChannel(club);
+        const nameInput = document.getElementById(`ch-name-${club}`);
+        const overrideName = nameInput ? nameInput.value.trim() : null;
+        handleCreateChannel(club, overrideName);
       } else if (action === "invite-selected") {
         const selectedEmails = Array.from(panel.querySelectorAll(`.applicant-check:checked`))
           .map(c => c.dataset.email)
@@ -1090,7 +1109,7 @@ function shortTarget(t) {
   if (t.includes("ODS")) return "ODC";
   if (t.includes("파트너")) return "파트너";
   if (t.includes("비시즌")) return "비시즌";
-  if (t.includes("여름")) return "여름시즌";
+  if (t.includes("가을")) return "가을시즌";
   return t.slice(0, 10);
 }
 
@@ -1248,8 +1267,8 @@ async function callChannelAPI(action, payload) {
   return await res.json();
 }
 
-async function handleCreateChannel(clubKey) {
-  const name = CHANNEL_PREFIX + clubKey;
+async function handleCreateChannel(clubKey, overrideName) {
+  const name = (overrideName && overrideName.length > 0) ? overrideName : (CHANNEL_PREFIX + clubKey);
   if (!confirm(`#${name} 채널을 생성합니다. 진행할까요?`)) return;
   showToast("채널 생성 중...");
   try {
