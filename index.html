@@ -673,21 +673,12 @@ HFK는 '느슨하지만 촘촘한' 커뮤니티를 만들어 가기 위해 2022�
   <button type="button" id="scrollToForm">신청 폼으로</button>
 </div>
 
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none" onload="if(window._submitted){document.getElementById('hfkForm').style.display='none';document.querySelector('.filter-bar').style.display='none';document.getElementById('clubGrid').style.display='none';document.querySelectorAll('.card.compact').forEach(el=>el.style.display='none');document.querySelector('header.page-header').style.display='none';document.getElementById('done').style.display='block';document.getElementById('stickyBar').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'});}"></iframe>
 
 <script>
-const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSfua6mcpfWZWOAOfcpDh01HGvbg9ytMMNj_jiuDgKkT8Su_Lw/formResponse";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwr-s_ct55lEvLjZM_T_CBHXIs0A4Z0hdNvyudupm_KoQzdY0eR3vR76nyZHT-C8xrjhg/exec";
+const APPS_AUTH = "hfk1004";
+let SEASON = "";
 
-const ENTRY = {
-  clubs:      "entry.472984658",
-  name:       "entry.1091634438",
-  email:      "entry.1924069292",
-  phone:      "entry.1862630567",
-  host:       "entry.1464297408",
-  motivation: "entry.1159197939",
-  target:     "entry.68521473",
-  promise:    "entry.446722",
-};
 
 const CLUB_IMAGES = [
   "https://lh7-rt.googleusercontent.com/formsz/AN7BsVCFhs1V6FZ2jMaykq-39lqgu1uI1qL-eKZ8KyO0jEh1zMJtBy1n3uO9C1VlCmn5m2T0L7IOxYwPcUIolkwSMyCrKjToLSh8u2uk6gsoBCc5ErAXmW2kNr9nQaw4M73HtBQ7JDy7hkeOCPTH1C2KhHMoG1HNHve0ts7TYFMszK6qkb7iQgAVQy9C07LudmYQnwWb56mnQWkFtu8WyQKs=w1408?key=mn122IjfHvpxhHUFFWUX8w",
@@ -945,6 +936,7 @@ async function loadAndRender() {
     const res = await fetch('./data/clubs.json?t=' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
+    SEASON = data.season || "";
     CLUBS = (data.clubs || []).map(c => ({
       ...c,
       season: c.season_count ? `${c.season_count}번째 시즌` : ""
@@ -965,7 +957,7 @@ function getChecked(name) {
   return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
 }
 
-document.getElementById("hfkForm").addEventListener("submit", function(ev) {
+document.getElementById("hfkForm").addEventListener("submit", async function(ev) {
   ev.preventDefault();
 
   const clubs = Array.from(state.selected);
@@ -994,35 +986,47 @@ document.getElementById("hfkForm").addEventListener("submit", function(ev) {
     return;
   }
 
-  const f = document.createElement("form");
-  f.action = FORM_ACTION;
-  f.method = "POST";
-  f.target = "hidden_iframe";
-  f.style.display = "none";
-
-  function add(name, value) {
-    const inp = document.createElement("input");
-    inp.type = "hidden"; inp.name = name; inp.value = value;
-    f.appendChild(inp);
-  }
-
-  clubs.forEach(v => add(ENTRY.clubs, v));
-  add(ENTRY.name, name);
-  add(ENTRY.email, email);
-  add(ENTRY.phone, phone);
-  add(ENTRY.host, host);
-  add(ENTRY.motivation, motivation);
-  add(ENTRY.target, target);
-  promise.forEach(v => add(ENTRY.promise, v));
-
-  document.body.appendChild(f);
-
   const btn = document.getElementById("submitBtn");
   btn.disabled = true;
   btn.textContent = "제출 중...";
-  window._submitted = true;
 
-  f.submit();
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      // Apps Script는 Content-Type을 설정하면 CORS preflight 발생하므로 생략
+      body: JSON.stringify({
+        action: "apply",
+        auth: APPS_AUTH,
+        season: SEASON,
+        name: name,
+        email: email,
+        phone: phone,
+        host: host,
+        motivation: motivation,
+        target: target,
+        promise: promise[0] || "",
+        clubs: clubs,
+      }),
+    });
+    const result = await res.json();
+    if (!result.ok) throw new Error(result.error || "서버 오류");
+
+    // 성공 UI
+    document.getElementById("hfkForm").style.display = "none";
+    document.querySelector(".filter-bar").style.display = "none";
+    document.getElementById("clubGrid").style.display = "none";
+    document.querySelectorAll(".card.compact").forEach(el => el.style.display = "none");
+    document.querySelector("header.page-header").style.display = "none";
+    document.getElementById("done").style.display = "block";
+    const sticky = document.getElementById("stickyBar");
+    if (sticky) sticky.classList.remove("show");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (e) {
+    console.error(e);
+    alert("제출 실패: " + e.message + "\n\n페이지를 새로고침하고 다시 시도해주세요.");
+    btn.disabled = false;
+    btn.textContent = "제출하기";
+  }
 });
 </script>
 </body>
