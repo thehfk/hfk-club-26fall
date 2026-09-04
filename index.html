@@ -286,9 +286,9 @@
   .detail-btn:hover { color: #7a0000; }
   .club-body-full {
     display: none;
-    margin-top: 8px;
-    padding-top: 12px;
-    border-top: 1px solid var(--line);
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
     font-size: 13.5px;
     line-height: 1.75;
     color: var(--text);
@@ -739,6 +739,7 @@ function renderClubs() {
     card.innerHTML = `
       ${imgHtml}
       <div class="club-card-body">
+        <div class="club-body-full">${renderRich(club.intro).replace(/\n/g, "<br>")}</div>
         <div class="club-head">
           <div style="flex:1">
             <div class="club-title"><span class="club-id">${escapeHtml(club.id)}</span>${escapeHtml(club.name)}</div>
@@ -755,7 +756,6 @@ function renderClubs() {
         <div class="club-actions">
           <button class="detail-btn" type="button">소개 펼치기 ▾</button>
         </div>
-        <div class="club-body-full">${renderRich(club.intro).replace(/\n/g, "<br>")}</div>
       </div>
     `;
 
