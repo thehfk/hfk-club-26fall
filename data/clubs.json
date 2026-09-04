@@ -1,6 +1,6 @@
 {
   "season": "26가을",
-  "generated_at": "2026-09-04T16:56:06+09:00",
+  "generated_at": "2026-09-04T17:00:46+09:00",
   "clubs": [
     {
       "id": "0",
@@ -275,7 +275,7 @@
       "time": "16:00-19:00",
       "location": null,
       "capacity": "5명",
-      "host": "HFK 대표 김재윤 @oasis_jaeyoon",
+      "host": "김재윤 (HFK 대표 @oasis_jaeyoon)",
       "status": "open",
       "hidden": false,
       "recruit_from": "2026-09-04",
