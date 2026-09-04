@@ -1,6 +1,6 @@
 {
   "season": "26가을",
-  "generated_at": "2026-09-05T07:44:16+09:00",
+  "generated_at": "2026-09-05T08:36:44+09:00",
   "clubs": [
     {
       "id": "0",
@@ -471,9 +471,9 @@
       "type": "취미",
       "deposit": "3만원",
       "deposit_amount": 30000,
-      "schedule": "9/18(금), 10/16(금), 11/13(금)",
+      "schedule": "9/22(화), 11/2(월), 11/30(월)",
       "time": "19:30-21:30",
-      "location": "3층 소정동",
+      "location": "5층 오아시스덕수궁",
       "capacity": "9명",
       "host": "박가을 (이마트 전략기획 @fall_in_fall)",
       "status": "open",
