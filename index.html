@@ -284,6 +284,26 @@
     text-decoration: underline;
   }
   .detail-btn:hover { color: #7a0000; }
+  .add-btn {
+    padding: 8px 18px;
+    border: 1.5px solid var(--hfk-red);
+    color: var(--hfk-red);
+    background: #fff;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .add-btn:hover:not(:disabled) { background: rgba(152,0,0,0.08); }
+  .add-btn.added {
+    background: var(--hfk-red);
+    color: #fff;
+  }
+  .add-btn.added:hover { background: #7a0000; }
+  .add-btn:disabled { border-color: var(--line); color: var(--muted); cursor: not-allowed; opacity: 0.6; }
+  .club-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
   .club-body-full {
     display: none;
     margin-bottom: 12px;
@@ -600,7 +620,7 @@ HFK는 '느슨하지만 촘촘한' 커뮤니티를 만들어 가기 위해 2022�
     <div class="card">
       <div class="q-title required">선택한 클럽</div>
       <div class="q-desc">2-3개 신청 추천 (온라인 1-2개, 오프라인 1-2개). 위의 카드에서 체크해 주세요.</div>
-      <div class="selected-summary empty" id="selectedSummary">선택한 클럽이 없습니다. 위의 카드에서 클럽을 선택해 주세요.</div>
+      <div class="selected-summary empty" id="selectedSummary">담은 클럽이 없습니다. 위의 카드에서 '담기' 버튼을 눌러 신청할 클럽을 담아 주세요.</div>
       <div class="error" data-for="clubs">하나 이상 선택해 주세요.</div>
     </div>
 
@@ -736,6 +756,7 @@ function renderClubs() {
     const imgUrl = club.image || `./images/${club.id}.png`;
     const imgHtml = `<img class="club-image" src="${escapeAttr(imgUrl)}" alt="${escapeAttr(club.name)}" loading="lazy" onerror="this.style.display='none'">`;
 
+    const isSelected = state.selected.has(club.value);
     card.innerHTML = `
       ${imgHtml}
       <div class="club-card-body">
@@ -745,7 +766,6 @@ function renderClubs() {
             <div class="club-title"><span class="club-id">${escapeHtml(club.id)}</span>${escapeHtml(club.name)}</div>
             ${club.season ? `<div class="club-season">${escapeHtml(club.season)}</div>` : ""}
           </div>
-          <input type="checkbox" class="club-check" data-value="${escapeAttr(club.value)}" aria-label="${escapeAttr(club.name)} 선택"${club.displayStatus ? " disabled" : ""}>
         </div>
         <div class="club-tags">
           <span class="tag tag-${club.mode === '온라인' ? 'online' : 'offline'}">${escapeHtml(club.mode)}</span>
@@ -755,22 +775,28 @@ function renderClubs() {
         <dl class="club-meta">${metaItems.join("")}</dl>
         <div class="club-actions">
           <button class="detail-btn" type="button">소개 펼치기 ▾</button>
+          <button class="add-btn${isSelected ? " added" : ""}" type="button" data-value="${escapeAttr(club.value)}"${club.displayStatus ? " disabled" : ""}>${isSelected ? "✓ 담김" : "+ 담기"}</button>
         </div>
       </div>
     `;
+    if (isSelected) card.classList.add("selected");
 
-    const check = card.querySelector(".club-check");
+    const addBtn = card.querySelector(".add-btn");
     const detailBtn = card.querySelector(".detail-btn");
 
-    check.addEventListener("change", (e) => {
+    addBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (club.displayStatus) { check.checked = false; return; }
-      if (check.checked) {
-        state.selected.add(club.value);
-        card.classList.add("selected");
-      } else {
+      if (club.displayStatus) return;
+      if (state.selected.has(club.value)) {
         state.selected.delete(club.value);
+        addBtn.classList.remove("added");
+        addBtn.textContent = "+ 담기";
         card.classList.remove("selected");
+      } else {
+        state.selected.add(club.value);
+        addBtn.classList.add("added");
+        addBtn.textContent = "✓ 담김";
+        card.classList.add("selected");
       }
       updateSelectionUI();
     });
@@ -781,9 +807,9 @@ function renderClubs() {
       detailBtn.textContent = expanded ? "소개 접기 ▴" : "소개 펼치기 ▾";
     });
 
-    // 카드 클릭(이미지/본문) → 소개 펼치기. 체크박스와 소개 펼치기 버튼은 각자 이벤트로 처리
+    // 카드 클릭(이미지/본문) → 소개 펼치기. 담기/펼치기 버튼은 각자 이벤트로 처리
     card.addEventListener("click", (e) => {
-      if (e.target === check || e.target === detailBtn) return;
+      if (e.target === addBtn || e.target === detailBtn) return;
       const expanded = card.classList.toggle("expanded");
       detailBtn.textContent = expanded ? "소개 접기 ▴" : "소개 펼치기 ▾";
     });
@@ -834,7 +860,7 @@ function updateSelectionUI() {
   const summary = document.getElementById("selectedSummary");
   if (state.selected.size === 0) {
     summary.classList.add("empty");
-    summary.textContent = "선택한 클럽이 없습니다. 위의 카드에서 클럽을 선택해 주세요.";
+    summary.textContent = "담은 클럽이 없습니다. 위의 카드에서 '담기' 버튼을 눌러 신청할 클럽을 담아 주세요.";
   } else {
     summary.classList.remove("empty");
     summary.innerHTML = "";
@@ -848,8 +874,11 @@ function updateSelectionUI() {
         const card = document.querySelector(`.club-card[data-id="${club.id}"]`);
         if (card) {
           card.classList.remove("selected");
-          const check = card.querySelector(".club-check");
-          if (check) check.checked = false;
+          const addBtn = card.querySelector(".add-btn");
+          if (addBtn) {
+            addBtn.classList.remove("added");
+            addBtn.textContent = "+ 담기";
+          }
         }
         updateSelectionUI();
       });
