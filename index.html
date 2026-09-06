@@ -1008,19 +1008,24 @@ async function loadAndRender() {
 
 async function loadCounts() {
   if (!SEASON) return;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
       method: "POST",
+      signal: controller.signal,
       body: JSON.stringify({
         action: "listCounts",
         auth: APPS_AUTH,
         season: SEASON,
       }),
     });
+    clearTimeout(timeoutId);
     const result = await res.json();
-    if (!result.ok) return;
+    if (!result.ok) throw new Error(result.error || 'listCounts failed');
     const counts = result.counts || {};
     document.querySelectorAll('.club-progress').forEach(el => {
+      el.style.display = '';  // 이전 실패 후 다시 보이게
       const value = el.dataset.clubValue;
       const cap = parseInt(el.dataset.capacity, 10);
       const count = counts[value] || 0;
@@ -1039,7 +1044,12 @@ async function loadCounts() {
       }
     });
   } catch (e) {
+    clearTimeout(timeoutId);
     console.error('counts fetch failed', e);
+    // 실패 시 게이지 숨김 (다음 갱신 때 재시도)
+    document.querySelectorAll('.club-progress').forEach(el => {
+      el.style.display = 'none';
+    });
   }
 }
 
