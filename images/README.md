@@ -4,19 +4,19 @@
 
 ## 파일명 규칙
 
-`{club_id}.png`
+`{club_id}.jpg`
 
-- 온라인 클럽: `0.png`, `1.png`, `2.png`, ... (숫자 id)
-- 오프라인 클럽: `a.png`, `b.png`, `c.png`, ... (알파벳 id)
+- 온라인 클럽: `0.jpg`, `1.jpg`, `2.jpg`, ... (숫자 id)
+- 오프라인 클럽: `a.jpg`, `b.jpg`, `c.jpg`, ... (알파벳 id)
 
 예:
-- `0.png` — 주간회고클럽 (id: 0)
-- `a.png` — 와인 소사이어티 (id: a)
-- `s.png` — 정동백합정원 (id: s)
+- `0.jpg` — 주간회고클럽 (id: 0)
+- `a.jpg` — 와인 소사이어티 (id: a)
+- `s.jpg` — 정동백합정원 (id: s)
 
 ## 자동 매핑
 
-index.html이 각 클럽 카드를 그릴 때 `./images/{club.id}.png` 를 자동으로 찾아 표시합니다.
+index.html이 각 클럽 카드를 그릴 때 `./images/{club.id}.jpg` 를 자동으로 찾아 표시합니다.
 파일이 없으면 이미지 영역이 숨겨집니다 (에러 없음).
 
 ## 크기 권장
@@ -37,5 +37,5 @@ image: "https://example.com/my-image.jpg"
 ---
 ```
 
-이 값이 있으면 `./images/{id}.png` 대신 이 URL을 사용합니다.
+이 값이 있으면 `./images/{id}.jpg` 대신 이 URL을 사용합니다.
 sync-clubs 실행 후 반영됩니다.
