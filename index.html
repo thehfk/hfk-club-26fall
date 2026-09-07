@@ -1028,7 +1028,8 @@ async function loadCounts() {
       el.style.display = '';  // 이전 실패 후 다시 보이게
       const value = el.dataset.clubValue;
       const cap = parseInt(el.dataset.capacity, 10);
-      const count = counts[value] || 0;
+      // 호스트는 기본 참여이므로 +1
+      const count = (counts[value] || 0) + 1;
       const bar = el.querySelector('.progress-bar');
       const text = el.querySelector('.progress-text');
       if (cap) {
