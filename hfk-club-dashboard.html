@@ -702,7 +702,8 @@ const CHANNEL_STATE_KEY = "hfk-club-channels";
 const INVITE_STATE_KEY = "hfk-club-invited";
 
 // 26가을 멤버 명단 (HFK사람들 시트 기준, 갱신 예정)
-const MEMBER_STATUS = {
+// 로그인 후 Apps Script listMemberStatus로 최신 시트 fetch → 이 객체 대체
+let MEMBER_STATUS = {
   "박초희":"first","임이랑":"first","이호준":"first","오주영":"first","손지희":"first","이보라":"first","이유라":"first","강주언":"first","이성규":"first","김지원":"first","유은지":"first","최민정":"first","한소희":"first","김유석":"first","서연주":"first","김혜미":"first","김주현":"first","이정민":"first","유다솜":"first","박지영":"first","김태림":"first","임세리":"first","김진":"first","한승훈":"first","배진현":"first","김아영":"first","최경원":"first","이예현":"first","안현우":"first","서지희":"first","최성우":"first","김학서":"first","박혜봉":"first","김승연":"first","육근혜":"first","유영이":"first","주영은":"first","이선혜":"first",
   "금가람":"re","유통민":"re","정나리":"re","김지현":"re","박정연":"re","안혜연":"re","김화진":"re","김희원":"re","김유일":"re","박아란":"re","김하나":"re","임성우":"re","이세림":"re","손현선":"re","강주현":"re","권오림":"re","손상희":"re","권수은":"re","임아영":"re","윤왕교":"re","김경아":"re","박승표":"re","장재형":"re","강혜원":"re","남은경":"re","허미현":"re","김세아":"re","김한울이":"re","돈명진":"re","원정현":"re","이홍진":"re","권도현":"re","신상호":"re","송선혜":"re","류채희":"re","이수림":"re","이정준":"re","김정민":"re","김혜리":"re","심수정":"re","홍수경":"re","전신애":"re","이현주":"re","서영인":"re","박혜림":"re","문윤선":"re","김민주":"re","홍은지":"re","허재영":"re","제정경":"re","최지영":"re","신윤아":"re","김선아":"re","조지현":"re","최소연":"re","한미정":"re","박미서":"re","김하정":"re","김남경":"re","조혜빈":"re","윤소현":"re","이수연":"re","한다희":"re","박여민":"re","홍원정":"re","윤아영":"re","진선라":"re","김민경":"re","주명선":"re","김미정":"re","도민우":"re","하현주":"re","박지원":"re","박시연":"re","나종원":"re","박재희":"re","김서현":"re","송서현":"re","방승환":"re","김혜림":"re","주선경":"re","고예환":"re","김한나":"re","서효정":"re","권나윤":"re","김수연":"re","배의열":"re","김규리":"re","김지애":"re","이주영":"re","선우정":"re","이수민":"re","김준형":"re","이효민":"re","김보경":"re","허재필":"re","박문희":"re",
   "김동일":"partner","심현보":"partner","김민정":"partner","이동진":"partner","김라현":"partner","이강원":"partner","권소이":"partner","김재윤":"partner","이 림":"partner",
@@ -821,6 +822,17 @@ async function loadData() {
     if (!result.ok) throw new Error(result.error || "listApplicants failed");
     state.headers = result.headers || [];
     state.rows = (result.rows || []).filter(r => r.length > 1 && r[0]);
+
+    // HFK사람들 시트에서 최신 멤버 등급 fetch (실패해도 하드코딩 fallback 사용)
+    try {
+      const memberResult = await callChannelAPI("listMemberStatus", { season: SEASON });
+      if (memberResult.ok && memberResult.statuses && Object.keys(memberResult.statuses).length > 0) {
+        MEMBER_STATUS = memberResult.statuses;
+        console.log(`MEMBER_STATUS 갱신: ${Object.keys(MEMBER_STATUS).length}명 (${SEASON} 시트 기준)`);
+      }
+    } catch (e) {
+      console.warn('listMemberStatus 실패, 하드코딩 fallback 사용', e);
+    }
     document.getElementById("lastUpdate").textContent = "업데이트: " + new Date().toLocaleString("ko-KR");
     render();
   } catch (e) {
