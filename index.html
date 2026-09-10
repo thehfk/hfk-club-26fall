@@ -608,15 +608,9 @@ HFK는 '느슨하지만 촘촘한' 커뮤니티를 만들어 가기 위해 2022�
 11. 비시즌 멤버(OB 멤버)도 HFK 후원금 납부 후 참여 가능합니다.</div>
   </div>
 
-  <div class="card compact">
-    <h2>2026 가을시즌 클럽 모집</h2>
-    <div class="body">1. 멤버 모집: 9/4(금) - 9/6(일)
-2. 멤버 확정: 9/7(월)
-3. 클럽 초대: 9/8(화) - 9/13(일)
-4. 클럽 운영: 9/14(월) - 11/30(월)
-
-신청 가능한 클럽 총 25개 (온라인 5개, 오프라인 20개)
-온라인 클럽은 숫자(0-4), 오프라인 클럽은 알파벳(a-x)으로 표시됩니다.</div>
+  <div class="card compact" id="seasonInfoCard">
+    <h2 id="seasonInfoTitle">시즌 클럽 모집</h2>
+    <div class="body" id="seasonInfoBody">불러오는 중...</div>
   </div>
 
   <div class="filter-bar">
@@ -997,12 +991,34 @@ async function loadAndRender() {
       };
     });
     renderClubs();
+    loadSeasonInfo();
     loadCounts();
     setInterval(loadCounts, 30000);
     window.addEventListener('focus', loadCounts);
   } catch (e) {
     console.error('clubs.json load failed', e);
     alert('클럽 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+  }
+}
+
+async function loadSeasonInfo() {
+  try {
+    const res = await fetch('./data/season-info.json?t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const info = await res.json();
+    const titleEl = document.getElementById('seasonInfoTitle');
+    const bodyEl = document.getElementById('seasonInfoBody');
+    if (titleEl && info.title) titleEl.textContent = info.title;
+    if (bodyEl) {
+      const phases = (info.phases || []).map((p, i) => `${i + 1}. ${p.label}: ${p.value}`).join('\n');
+      const s = info.stats || {};
+      const statsLine = s.total != null
+        ? `\n\n신청 가능한 클럽 총 ${s.total}개 (온라인 ${s.online}개, 오프라인 ${s.offline}개)\n온라인 클럽은 숫자(${s.online_range}), 오프라인 클럽은 알파벳(${s.offline_range})으로 표시됩니다.`
+        : '';
+      bodyEl.textContent = phases + statsLine;
+    }
+  } catch (e) {
+    console.error('season-info.json load failed', e);
   }
 }
 

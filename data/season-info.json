@@ -1,0 +1,19 @@
+{
+  "season": "26가을",
+  "title": "2026 가을시즌 클럽 모집",
+  "phases": [
+    { "key": "recruit",       "label": "멤버 모집",  "value": "9/4(금) - 9/6(일)" },
+    { "key": "confirm",       "label": "멤버 확정",  "value": "9/7(월)" },
+    { "key": "invite",        "label": "클럽 초대",  "value": "9/8(화) - 9/11(금)" },
+    { "key": "extra_recruit", "label": "추가 모집",  "value": "9/12(토) - 9/13(일)" },
+    { "key": "operate",       "label": "클럽 운영",  "value": "9/14(월) - 11/30(월)" }
+  ],
+  "stats": {
+    "total": 25,
+    "online": 5,
+    "offline": 20,
+    "online_range": "0-4",
+    "offline_range": "a-x"
+  },
+  "notes": "다음 시즌 오픈 시 이 파일만 편집하세요. index.html 헤더와 대시보드 미선정 DM 문구가 자동 반영됩니다."
+}

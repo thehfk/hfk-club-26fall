@@ -686,8 +686,9 @@
 // Google Sheet에서 파일 → 공유 → 웹에 게시 → CSV 형식으로 게시한 URL
 // clubs.json에서 로드되는 현재 시즌명 (예: "26가을"). listApplicants API 호출에 사용
 let SEASON = "";
-// 미선정 안내 DM에 함께 넣을 추가 접수 기간 (시즌마다 갱신). 없으면 해당 문장 통째로 생략
-const EXTRA_APPLY_RANGE = "9/14(월) - 9/15(화)";
+// season-info.json에서 자동 로드되는 "추가 모집" 기간 문자열. 미선정 안내 DM에 사용
+// 시즌 오픈 시 data/season-info.json만 편집하면 신청 폼 헤더와 함께 자동 반영
+let EXTRA_APPLY_RANGE = "";
 // 대시보드 접근 암호
 const ACCESS_PW = "hfk1004";
 
@@ -792,6 +793,17 @@ async function loadData() {
       const cr = await fetch('./data/clubs.json?t=' + Date.now());
       const cd = await cr.json();
       SEASON = cd.season || "";
+      // season-info.json에서 추가 모집 기간 로드 (미선정 DM에 사용)
+      try {
+        const sr = await fetch('./data/season-info.json?t=' + Date.now());
+        if (sr.ok) {
+          const sInfo = await sr.json();
+          const extra = (sInfo.phases || []).find(p => p.key === "extra_recruit");
+          if (extra && extra.value) EXTRA_APPLY_RANGE = extra.value;
+        }
+      } catch (e) {
+        console.warn('season-info.json load failed', e);
+      }
       for (const club of (cd.clubs || [])) {
         // capacity: "8명" → 8, "7-11명" → 11 (최대), null → null
         let cap = null;
