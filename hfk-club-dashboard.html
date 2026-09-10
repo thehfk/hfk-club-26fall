@@ -686,6 +686,8 @@
 // Google Sheet에서 파일 → 공유 → 웹에 게시 → CSV 형식으로 게시한 URL
 // clubs.json에서 로드되는 현재 시즌명 (예: "26가을"). listApplicants API 호출에 사용
 let SEASON = "";
+// 미선정 안내 DM에 함께 넣을 추가 접수 기간 (시즌마다 갱신). 없으면 해당 문장 통째로 생략
+const EXTRA_APPLY_RANGE = "9/14(월) - 9/15(화)";
 // 대시보드 접근 암호
 const ACCESS_PW = "hfk1004";
 
@@ -1320,6 +1322,8 @@ async function handleInvite(clubKey, emails, rejectEmails) {
       clubLabel: clubInfo ? clubInfo.name : channel.name,
       emails: emails,
       rejectEmails: rejectEmails || [],
+      season: SEASON,
+      extraApplyRange: EXTRA_APPLY_RANGE,
     });
     if (result.ok) {
       // 성공적으로 초대된 이메일 저장 (초대 + 이미 멤버 둘 다)
