@@ -1058,6 +1058,7 @@ function buildApplicantsPanel(clubKey, info) {
       </div>
       ${channelState
         ? `<button class="channel-btn" data-action="invite-selected" data-club="${escapeAttr(clubKey)}">선정 처리 (선택 초대 + 미선정 안내)</button>
+           <button class="channel-btn secondary" data-action="invite-only-selected" data-club="${escapeAttr(clubKey)}">선택 초대만 (DM 없음)</button>
            <button class="channel-btn secondary" data-action="invite-all" data-club="${escapeAttr(clubKey)}">전체 초대만</button>`
         : `<button class="channel-btn" data-action="create-channel" data-club="${escapeAttr(clubKey)}">채널 생성</button>`}
     </div>
@@ -1115,6 +1116,16 @@ function buildApplicantsPanel(clubKey, info) {
         }
         if (!confirm(`선정 처리합니다:\n• 채널 초대: ${selectedEmails.length}명\n• 미선정 안내 DM: ${rejectedEmails.length}명\n\n진행할까요?`)) return;
         handleInvite(club, selectedEmails, rejectedEmails);
+      } else if (action === "invite-only-selected") {
+        const selectedEmails = Array.from(panel.querySelectorAll(`.applicant-check:checked`))
+          .map(c => c.dataset.email)
+          .filter(Boolean);
+        if (selectedEmails.length === 0) {
+          showToast("선택된 멤버가 없습니다", "error");
+          return;
+        }
+        if (!confirm(`선택한 ${selectedEmails.length}명만 채널에 초대합니다. (미선정 DM 없음)\n\n진행할까요?`)) return;
+        handleInvite(club, selectedEmails, []);
       } else if (action === "invite-all") {
         const emails = (state.clubApplicants[club] || []).map(a => a.email).filter(Boolean);
         if (emails.length === 0) {
