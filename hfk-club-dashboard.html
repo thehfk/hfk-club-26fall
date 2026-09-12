@@ -1473,6 +1473,10 @@ function showResultModal(clubKey, clubInfo, channel, result) {
         <div class="lbl">이미 멤버</div>
       </div>
       <div class="result-stat ok">
+        <div class="val">${result.welcomeSent || 0}</div>
+        <div class="lbl">환영 DM</div>
+      </div>
+      <div class="result-stat ok">
         <div class="val">${(result.rejectNotified || []).length}</div>
         <div class="lbl">미선정 DM</div>
       </div>
